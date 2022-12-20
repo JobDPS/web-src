@@ -7,14 +7,6 @@ import Typography from "@mui/material/Typography";
 
 const styles = (theme) => ({
 	...theme.spread,
-	toolbar: {
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "flex-end",
-		padding: theme.spacing(0, 1),
-		// necessary for content to be below app bar
-		...theme.mixins.toolbar
-	},
 	content: {
 		display: "flex",
 		flexGrow: 1,
@@ -29,7 +21,6 @@ class Home extends Component {
 
 		return (
 			<Fragment>
-				<div className={classes.toolbar} />
 				<div className={classes.content}>
 					<Typography paragraph>home</Typography>
 				</div>

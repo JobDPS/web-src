@@ -13,6 +13,9 @@ const theme = {
 			contrastText: "#fff"
 		}
 	},
+	typography: {
+		fontFamily: `"Google Sans", "Roboto", "Helvetica", "Arial", sans-serif`
+	},
 	spread: {}
 };
 

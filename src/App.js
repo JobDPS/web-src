@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Routes as Switch, Route } from "react-router-dom";
 import "./App.css";
-import { ThemeProvider as MuiThemeProvider } from "@mui/styles";
-import createTheme from "@mui/material/styles/createTheme";
+import { ThemeProvider as MuiThemeProvider, createTheme } from "@mui/material/styles";
 // import jwtDecode from 'jwt-decode';
 // Redux
 import { Provider } from "react-redux";
 // import store from './redux/store';
 // Components
-// import NavBar from './layout/NavBar';
+import NavBar from "./layout/NavBar";
 import themeObject from "./util/theme";
 import UnAuthRoute from "./util/UnAuthRoute";
 import AuthRoute from "./util/AuthRoute";
@@ -45,7 +44,7 @@ class App extends Component {
 			<MuiThemeProvider theme={theme}>
 				{/* <Provider store={store}> */}
 				<Router>
-					{/* <NavBar /> */}
+					<NavBar />
 					<div>
 						<Switch>
 							<Route exact path='/' element={<Home />} />
