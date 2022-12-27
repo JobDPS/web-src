@@ -2,6 +2,7 @@ import * as React from "react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import { withStyles } from "@mui/styles";
 
 import AppBar from "@mui/material/AppBar";
@@ -38,6 +39,7 @@ const styles = (theme) => ({
 		color: theme.palette.primary[500]
 	},
 	link: {
+		transition: `all 0.3s ease-in-out`,
 		"&:hover": {
 			boxShadow: "0 -2px 0 white inset"
 		}
@@ -65,6 +67,51 @@ function NavBar (props) {
 	const handleCloseUserMenu = () => {
 		setAnchorElUser(null);
 	};
+
+	const user = props.user.authenticated ? (
+		<div>
+			<Tooltip title='Open settings'>
+				<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+					<Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
+				</IconButton>
+			</Tooltip>
+			<Menu
+				sx={{ mt: "45px" }}
+				id='menu-appbar'
+				anchorEl={anchorElUser}
+				anchorOrigin={{
+					vertical: "top",
+					horizontal: "right"
+				}}
+				keepMounted
+				transformOrigin={{
+					vertical: "top",
+					horizontal: "right"
+				}}
+				open={Boolean(anchorElUser)}
+				onClose={handleCloseUserMenu}
+			>
+				{settings.map((setting) => (
+					<MenuItem key={setting} onClick={handleCloseUserMenu}>
+						<Typography textAlign='center'>{setting}</Typography>
+					</MenuItem>
+				))}
+			</Menu>
+		</div>
+	) : (
+		<div style={{ display: "flex", flexDirection: "row" }}>
+			<Link to='/login' className={classes.link}>
+				<Button onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block" }}>
+					Login
+				</Button>
+			</Link>
+			<Link to='/signup' className={classes.link}>
+				<Button onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block" }}>
+					Sign Up
+				</Button>
+			</Link>
+		</div>
+	);
 
 	return (
 		<div className={classes.root}>
@@ -132,7 +179,7 @@ function NavBar (props) {
 							</Menu>
 						</Box>
 
-						<Box sx={{ display: { xs: "flex", md: "none" } }} style={{ margin: "0 auto" }}>
+						<Box sx={{ display: { xs: "flex", md: "none" }, mx: "auto" }}>
 							<Link to='/' className={classes.mainLink}>
 								<WorkRoundedIcon sx={{ mr: 1, mt: 0.4 }} />
 								<SearchRoundedIcon
@@ -148,7 +195,8 @@ function NavBar (props) {
 										fontWeight: 700,
 										letterSpacing: ".3rem",
 										color: "inherit",
-										textDecoration: "none"
+										textDecoration: "none",
+										display: { xs: "none", sm: "flex" }
 									}}
 								>
 									JobDPS
@@ -158,9 +206,8 @@ function NavBar (props) {
 
 						<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
 							{pages.map((page) => (
-								<div className={classes.link}>
+								<div className={classes.link} key={page}>
 									<Button
-										key={page}
 										onClick={handleCloseNavMenu}
 										sx={{ my: 2, color: "white", display: "block" }}
 									>
@@ -170,35 +217,7 @@ function NavBar (props) {
 							))}
 						</Box>
 
-						<Box sx={{ flexGrow: 0 }}>
-							<Tooltip title='Open settings'>
-								<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-									<Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
-								</IconButton>
-							</Tooltip>
-							<Menu
-								sx={{ mt: "45px" }}
-								id='menu-appbar'
-								anchorEl={anchorElUser}
-								anchorOrigin={{
-									vertical: "top",
-									horizontal: "right"
-								}}
-								keepMounted
-								transformOrigin={{
-									vertical: "top",
-									horizontal: "right"
-								}}
-								open={Boolean(anchorElUser)}
-								onClose={handleCloseUserMenu}
-							>
-								{settings.map((setting) => (
-									<MenuItem key={setting} onClick={handleCloseUserMenu}>
-										<Typography textAlign='center'>{setting}</Typography>
-									</MenuItem>
-								))}
-							</Menu>
-						</Box>
+						<Box sx={{ flexGrow: 0 }}>{user}</Box>
 					</Toolbar>
 				</Container>
 			</AppBar>
@@ -207,9 +226,9 @@ function NavBar (props) {
 }
 
 NavBar.propTypes = {
-	classes: PropTypes.object.isRequired
+	classes: PropTypes.object.isRequired,
 	// createServer: PropTypes.func.isRequired,
-	// user: PropTypes.object.isRequired,
+	user: PropTypes.object.isRequired
 	// UI: PropTypes.object.isRequired
 };
 
@@ -223,5 +242,4 @@ const mapActionsToProps = {
 	// createServer
 };
 
-// export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(NavBar));
-export default withStyles(styles)(NavBar);
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(NavBar));

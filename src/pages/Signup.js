@@ -3,8 +3,10 @@ import { withStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Input from '@mui/material/Input';
 
 import { connect } from "react-redux";
+import { signupUser } from "../redux/actions/userActions";
 
 const styles = (theme) => ({
 	...theme.spread,
@@ -46,7 +48,7 @@ const styles = (theme) => ({
 	}
 });
 
-class Home extends Component {
+class Signup extends Component {
 	render () {
 		const classes = this.props.classes;
 
@@ -54,53 +56,27 @@ class Home extends Component {
 			<Fragment>
 				<div className={classes.toolbar} />
 				<div className={classes.content}>
-					<div className={classes.intro}>
-						<div className={classes.billboard}>
-							<Typography variant='h2'>Tired of using spreadsheets?</Typography>
-							<br />
-							<Typography>
-								JobDPS is the multi-platform tool to help discuss, plan, and schedule everything
-								involved in your job search—without a messy spreadsheet.
-							</Typography>
-							<br />
-							<Button size='large' variant='contained' color='primary'>
-								Get Started
-							</Button>
-						</div>
-					</div>
-					<br />
-					<div className={classes.rotate}>
-						<div className={classes.intro2}>
-							<Button variant='contained' color='primary'>
-								Create Account
-							</Button>
-						</div>
-					</div>
-					<div className={classes.intro3}>
-						<Button variant='contained' color='primary'>
-							Explore
-						</Button>
-					</div>
+					signup
 				</div>
 			</Fragment>
 		);
 	}
 }
 
-Home.propTypes = {
+Signup.propTypes = {
 	classes: PropTypes.object.isRequired,
-	// loginUser: PropTypes.func.isRequired,
+	signupUser: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
-	// UI: PropTypes.object.isRequired
+	UI: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-	user: state.user
-	// UI: state.UI
+	user: state.user,
+	UI: state.UI
 });
 
 const mapActionsToProps = {
-	// loginUser
+	signupUser
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Home));
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Signup));

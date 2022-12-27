@@ -3,6 +3,7 @@ import clsx from "clsx";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { withStyles } from "@mui/styles";
+import { connect } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -36,8 +37,11 @@ const styles = (theme) => ({
 		flexDirection: "row"
 	},
 	link: {
+		transition: `all 0.2s ease-in-out`,
+		textDecoration: "underline",
+		textDecorationColor: "transparent",
 		"&:hover": {
-			textDecoration: "underline"
+			textDecorationColor: "inherit"
 		}
 	},
 	separator: {
@@ -49,74 +53,84 @@ const styles = (theme) => ({
 function Footer (props) {
 	const classes = props.classes;
 	return (
-		<Paper variant='outlined' square elevation={4} className={classes.root} style={{ backgroundColor: "#f3f4f6" }}>
+		<Paper square elevation={4} className={classes.root} sx={{ backgroundColor: "#f3f4f6" }}>
 			<Grid container spacing={{ xs: 1, sm: 1, md: 2 }}>
 				<Grid item xs={12} sm={12} md={4}>
-					<Link to='/' className={classes.mainLink}>
-						<WorkRoundedIcon sx={{ mr: 1, mt: 0.4 }} />
-						<SearchRoundedIcon sx={{ mr: 1, mt: 0.4 }} className={classes.searchIcon} viewBox='0 0 32 32' />
-						<Typography
-							variant='h6'
-							noWrap
-							sx={{
-								mr: 2,
-								fontWeight: 700,
-								letterSpacing: ".3rem",
-								color: "inherit",
-								textDecoration: "none"
-							}}
-						>
-							JobDPS
-						</Typography>
-					</Link>
+					<Box display='flex' justifyContent='center' alignItems='center'>
+						<Link to='/' className={classes.mainLink}>
+							<WorkRoundedIcon sx={{ mr: 1, mt: 0.4 }} />
+							<SearchRoundedIcon
+								sx={{ mr: 1, mt: 0.4 }}
+								className={classes.searchIcon}
+								viewBox='0 0 32 32'
+							/>
+							<Typography
+								variant='h6'
+								noWrap
+								sx={{
+									mr: 2,
+									fontWeight: 700,
+									letterSpacing: ".3rem",
+									color: "inherit",
+									textDecoration: "none"
+								}}
+							>
+								JobDPS
+							</Typography>
+						</Link>
+					</Box>
 				</Grid>
 				<Grid item xs={12} sm={12} md={4}>
-					<div className={classes.list}>
-						<Link to='/' className={classes.link}>
-							<Typography
-								noWrap
-								sx={{
-									fontWeight: 700,
-									color: "inherit",
-									textDecoration: "none"
-								}}
-							>
-								About Us
-							</Typography>
-						</Link>
-						<span className={classes.separator} />
-						<Link to='/' className={classes.link}>
-							<Typography
-								noWrap
-								sx={{
-									fontWeight: 700,
-									color: "inherit",
-									textDecoration: "none"
-								}}
-							>
-								Contact
-							</Typography>
-						</Link>
-						<span className={classes.separator} />
-						<Link to='/' className={classes.link}>
-							<Typography
-								noWrap
-								sx={{
-									fontWeight: 700,
-									color: "inherit",
-									textDecoration: "none"
-								}}
-							>
-								Help Center
-							</Typography>
-						</Link>
-					</div>
+					<Box display='flex' justifyContent='center' alignItems='center'>
+						<div className={classes.list}>
+							<Link to='/' className={classes.link}>
+								<Typography
+									noWrap
+									sx={{
+										fontWeight: 700,
+										color: "inherit",
+										textDecoration: "none"
+									}}
+								>
+									About Us
+								</Typography>
+							</Link>
+							<span className={classes.separator} />
+							<Link to='/' className={classes.link}>
+								<Typography
+									noWrap
+									sx={{
+										fontWeight: 700,
+										color: "inherit",
+										textDecoration: "none"
+									}}
+								>
+									Contact
+								</Typography>
+							</Link>
+							<span className={classes.separator} />
+							<Link to='/' className={classes.link}>
+								<Typography
+									noWrap
+									sx={{
+										fontWeight: 700,
+										color: "inherit",
+										textDecoration: "none"
+									}}
+								>
+									Help Center
+								</Typography>
+							</Link>
+						</div>
+					</Box>
 				</Grid>
 				<Grid item xs={12} sm={12} md={4}>
 					<Typography />
 				</Grid>
 				<Grid item xs={12} sm={12} md={4}>
-					<Typography>Copyright © 2022 JobDPS</Typography>
+					<Box display='flex' justifyContent='center' alignItems='center'>
+						<Typography variant='caption'>Copyright © 2022 JobDPS</Typography>
+					</Box>
 				</Grid>
 				<Grid item xs={12} sm={12} md={4}>
 					<Typography />
@@ -149,5 +163,4 @@ const mapActionsToProps = {
 	// createServer
 };
 
-// export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(NavBar));
-export default withStyles(styles)(Footer);
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Footer));
