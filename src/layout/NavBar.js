@@ -30,20 +30,25 @@ const styles = (theme) => ({
 	},
 	mainLink: {
 		display: "flex",
-		marginRight: "16px"
+		marginLeft: "16px"
 	},
 	searchIcon: {
 		padding: "5px 0 0 3px",
 		position: "absolute",
-		color: theme.palette.primary.main
+		color: theme.palette.primary[500]
+	},
+	link: {
+		"&:hover": {
+			boxShadow: "0 -2px 0 white inset"
+		}
 	}
 });
 
 function NavBar (props) {
 	const classes = props.classes;
-	const pages = [ "Explore", "Plan", "Schedule", "Discuss", "Social", "Companies" ];
+	const pages = [ "Explore", "Discuss", "Plan", "Schedule", "Social", "Companies" ];
 	const settings = [ "Profile", "Settings", "Logout" ];
-	// const theme = useTheme();
+
 	const [ anchorElNav, setAnchorElNav ] = React.useState(null);
 	const [ anchorElUser, setAnchorElUser ] = React.useState(null);
 
@@ -63,12 +68,11 @@ function NavBar (props) {
 
 	return (
 		<div className={classes.root}>
-			{/* <CssBaseline /> */}
-			<AppBar position='static'>
+			<AppBar>
 				<Container maxWidth='xl'>
 					<Toolbar disableGutters>
 						<Box sx={{ display: { xs: "none", md: "flex" } }}>
-							<Link to='/' className={classes.mainLink} style={{ paddingLeft: "16px" }}>
+							<Link to='/' className={classes.mainLink}>
 								<WorkRoundedIcon sx={{ mr: 1, mt: 0.4 }} />
 								<SearchRoundedIcon
 									sx={{ mr: 1, mt: 0.4 }}
@@ -154,13 +158,15 @@ function NavBar (props) {
 
 						<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
 							{pages.map((page) => (
-								<Button
-									key={page}
-									onClick={handleCloseNavMenu}
-									sx={{ my: 2, color: "white", display: "block" }}
-								>
-									{page}
-								</Button>
+								<div className={classes.link}>
+									<Button
+										key={page}
+										onClick={handleCloseNavMenu}
+										sx={{ my: 2, color: "white", display: "block" }}
+									>
+										{page}
+									</Button>
+								</div>
 							))}
 						</Box>
 

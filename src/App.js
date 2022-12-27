@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 // import store from './redux/store';
 // Components
 import NavBar from "./layout/NavBar";
+import Footer from "./layout/Footer";
 import themeObject from "./util/theme";
 import UnAuthRoute from "./util/UnAuthRoute";
 import AuthRoute from "./util/AuthRoute";
@@ -55,6 +56,7 @@ class App extends Component {
 							<Route path='*' to='/' />
 						</Switch>
 					</div>
+					<Footer />
 				</Router>
 				{/* </Provider> */}
 			</MuiThemeProvider>
