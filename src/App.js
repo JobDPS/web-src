@@ -14,7 +14,7 @@ import AuthRoute from "./util/AuthRoute";
 // Pages
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Signup from './pages/Signup';
+import Signup from "./pages/Signup";
 // import server from './pages/server';
 // import user from './pages/user';
 // import post from './pages/post';
@@ -48,24 +48,8 @@ class App extends Component {
 						<div>
 							<Switch>
 								<Route exact path='/' element={<Home />} />
-								<Route
-									exact
-									path='/login'
-									element={
-										<UnAuthRoute>
-											<Login />
-										</UnAuthRoute>
-									}
-								/>
-								<Route
-									exact
-									path='/signup'
-									element={
-										<UnAuthRoute>
-											<Signup />
-										</UnAuthRoute>
-									}
-								/>
+								<Route exact path='/login' element={<UnAuthRoute element={Login} />} />
+								<Route exact path='/signup' element={<UnAuthRoute element={Signup} />} />
 								{/* <AuthRoute exact path='/servers/:name/channels/:channel' component={server} />
 								<Route exact path='/users/:handle/post/:postId' component={post} /> */}
 								<Route path='*' to='/' />

@@ -8,7 +8,6 @@ function* loginUser (action) {
 		setAuthorizationHeader(res.data.token, res.data.refreshToken);
 		yield getUserData();
 		yield put({ type: "CLEAR_ERRORS" });
-		action.payload.history.push("/");
 	} catch (e) {
 		// TODO: Handle specific errors from Firebase under e.response.data.error
 		yield put({ type: "SET_ERRORS", payload: e.response.data });
@@ -33,7 +32,6 @@ function* signupUser (action) {
 		setAuthorizationHeader(res.data.token, res.data.refreshToken);
 		yield getUserData();
 		yield put({ type: "CLEAR_ERRORS" });
-		action.payload.history.push("/");
 	} catch (e) {
 		// TODO: Handle specific errors from Firebase under e.response.data.error
 		yield put({ type: "SET_ERRORS", payload: e.response.data });

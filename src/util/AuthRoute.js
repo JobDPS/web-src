@@ -2,8 +2,8 @@ import { Navigate } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-const AuthRoute = ({ authenticated, children }) => {
-	return !authenticated ? <Navigate to='/login' replace /> : children;
+const AuthRoute = ({ authenticated, element: Component, ...rest }) => {
+	return !authenticated ? <Navigate to='/login' replace /> : <Component {...rest} />;
 };
 
 AuthRoute.propTypes = {

@@ -1,12 +1,12 @@
 import * as types from "../types";
 import axios from "axios";
 
-export const loginUser = (userData, history) => (dispatch) => {
-	dispatch({ type: "LOGIN", payload: { userData, history } });
+export const loginUser = (userData) => (dispatch) => {
+	dispatch({ type: "LOGIN", payload: { userData } });
 };
 
-export const signupUser = (newUserData, history) => (dispatch) => {
-	dispatch({ type: "SIGNUP", payload: { newUserData, history } });
+export const signupUser = (newUserData) => (dispatch) => {
+	dispatch({ type: "SIGNUP", payload: { newUserData } });
 };
 
 export const logoutUser = () => (dispatch) => {

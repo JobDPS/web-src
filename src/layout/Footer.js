@@ -57,7 +57,7 @@ function Footer (props) {
 			<Grid container spacing={{ xs: 1, sm: 1, md: 2 }}>
 				<Grid item xs={12} sm={12} md={4}>
 					<Box display='flex' justifyContent='center' alignItems='center'>
-						<Link to='/' className={classes.mainLink}>
+						<div className={classes.mainLink}>
 							<WorkRoundedIcon sx={{ mr: 1, mt: 0.4 }} />
 							<SearchRoundedIcon
 								sx={{ mr: 1, mt: 0.4 }}
@@ -77,7 +77,7 @@ function Footer (props) {
 							>
 								JobDPS
 							</Typography>
-						</Link>
+						</div>
 					</Box>
 				</Grid>
 				<Grid item xs={12} sm={12} md={4}>

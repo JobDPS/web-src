@@ -48,6 +48,8 @@ const styles = (theme) => ({
 
 function NavBar (props) {
 	const classes = props.classes;
+	const { loading } = props.UI;
+	const { authenticated, loading: loading2 } = props.user;
 	const pages = [ "Explore", "Discuss", "Plan", "Schedule", "Social", "Companies" ];
 	const settings = [ "Profile", "Settings", "Logout" ];
 
@@ -68,11 +70,14 @@ function NavBar (props) {
 		setAnchorElUser(null);
 	};
 
-	const user = props.user.authenticated ? (
+	const user = authenticated ? (
 		<div>
 			<Tooltip title='Open settings'>
 				<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-					<Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
+					<Avatar
+						alt='Remy Sharp'
+						src={!authenticated || loading2 ? "" : props.user.credentials.imageUrl.stringValue}
+					/>
 				</IconButton>
 			</Tooltip>
 			<Menu
@@ -228,8 +233,8 @@ function NavBar (props) {
 NavBar.propTypes = {
 	classes: PropTypes.object.isRequired,
 	// createServer: PropTypes.func.isRequired,
-	user: PropTypes.object.isRequired
-	// UI: PropTypes.object.isRequired
+	user: PropTypes.object.isRequired,
+	UI: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
