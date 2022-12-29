@@ -20,6 +20,8 @@ import MenuItem from "@mui/material/MenuItem";
 import WorkRoundedIcon from "@mui/icons-material/WorkRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
+import { logoutUser } from "../redux/actions/userActions";
+
 const styles = (theme) => ({
 	...theme.spread,
 	root: {
@@ -70,6 +72,10 @@ function NavBar (props) {
 		setAnchorElUser(null);
 	};
 
+	const handleLogout = () => {
+		props.logoutUser();
+	};
+
 	const user = authenticated ? (
 		<div>
 			<Tooltip title='Open settings'>
@@ -96,11 +102,18 @@ function NavBar (props) {
 				open={Boolean(anchorElUser)}
 				onClose={handleCloseUserMenu}
 			>
-				{settings.map((setting) => (
-					<MenuItem key={setting} onClick={handleCloseUserMenu}>
-						<Typography textAlign='center'>{setting}</Typography>
-					</MenuItem>
-				))}
+				{settings.map(
+					(setting) =>
+						setting === "Logout" ? (
+							<MenuItem key={setting} onClick={handleLogout}>
+								<Typography textAlign='center'>{setting}</Typography>
+							</MenuItem>
+						) : (
+							<MenuItem key={setting} onClick={handleCloseUserMenu}>
+								<Typography textAlign='center'>{setting}</Typography>
+							</MenuItem>
+						)
+				)}
 			</Menu>
 		</div>
 	) : (
@@ -232,7 +245,7 @@ function NavBar (props) {
 
 NavBar.propTypes = {
 	classes: PropTypes.object.isRequired,
-	// createServer: PropTypes.func.isRequired,
+	logoutUser: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired
 };
@@ -245,6 +258,7 @@ const mapStateToProps = (state) => ({
 const mapActionsToProps = {
 	// loginUser
 	// createServer
+	logoutUser
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(NavBar));

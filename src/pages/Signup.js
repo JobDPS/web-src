@@ -8,7 +8,6 @@ import Paper from "@mui/material/Paper";
 import Input from "@mui/material/Input";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 
 import { connect } from "react-redux";
@@ -32,6 +31,9 @@ const styles = (theme) => ({
 	form: {
 		display: "flex",
 		flexDirection: "column"
+	},
+	progress: {
+		position: "absolute"
 	}
 });
 
@@ -44,9 +46,9 @@ class Signup extends Component {
 		errors: {}
 	};
 
-	static getDerivedStateFromProps (props, state) {
-		if (props.UI.errors) return { ...state, errors: props.UI.errors };
-		return state;
+	componentDidUpdate (prevProps, prevState) {
+		if (this.props.UI.errors && JSON.stringify(this.props.UI.errors) !== JSON.stringify(this.state.errors))
+			this.setState({ errors: this.props.UI.errors });
 	}
 
 	handleSubmit = (event) => {
