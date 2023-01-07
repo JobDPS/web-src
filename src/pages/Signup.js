@@ -11,7 +11,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import FormHelperText from "@mui/material/FormHelperText";
 
 import { connect } from "react-redux";
-import { signupUser } from "../redux/actions/userActions";
+import { signupUser, clearErrors } from "../redux/actions/userActions";
 
 const styles = (theme) => ({
 	...theme.spread,
@@ -66,6 +66,7 @@ class Signup extends Component {
 		this.setState({
 			[event.target.name]: event.target.value
 		});
+		if (this.props.UI.errors) this.props.clearErrors();
 	};
 
 	render () {
@@ -168,6 +169,7 @@ class Signup extends Component {
 Signup.propTypes = {
 	classes: PropTypes.object.isRequired,
 	signupUser: PropTypes.func.isRequired,
+	clearErrors: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired
 };
@@ -178,7 +180,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapActionsToProps = {
-	signupUser
+	signupUser,
+	clearErrors
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Signup));

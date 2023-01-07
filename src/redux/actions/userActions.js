@@ -19,6 +19,10 @@ export const getUserData = () => (dispatch) => {
 	dispatch({ type: "GET_USER_DATA" });
 };
 
+export const clearErrors = () => (dispatch) => {
+	dispatch({type: "CLEAR_ERRORS"});
+};
+
 // export const uploadImage = (formData) => (dispatch) => {
 // 	dispatch({ type: LOADING_USER });
 // 	axios

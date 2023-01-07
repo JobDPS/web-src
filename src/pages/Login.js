@@ -13,7 +13,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import FormHelperText from "@mui/material/FormHelperText";
 
 import { connect } from "react-redux";
-import { loginUser } from "../redux/actions/userActions";
+import { loginUser, clearErrors } from "../redux/actions/userActions";
 
 const styles = (theme) => ({
 	...theme.spread,
@@ -64,6 +64,7 @@ class Login extends Component {
 		this.setState({
 			[event.target.name]: event.target.value
 		});
+		if (this.props.UI.errors) this.props.clearErrors();
 	};
 
 	render () {
@@ -147,6 +148,7 @@ class Login extends Component {
 Login.propTypes = {
 	classes: PropTypes.object.isRequired,
 	loginUser: PropTypes.func.isRequired,
+	clearErrors: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired
 };
@@ -157,7 +159,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapActionsToProps = {
-	loginUser
+	loginUser,
+	clearErrors
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Login));
