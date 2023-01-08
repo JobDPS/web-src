@@ -5,9 +5,11 @@ import createSagaMiddleware from "redux-saga";
 import userReducer from "./reducers/userReducer";
 // import dataReducer from "./reducers/dataReducer";
 import uiReducer from "./reducers/uiReducer";
+import discussReducer from "./reducers/discussReducer";
 
 // import dataSaga from "./saga/dataSagas";
 import userSaga from "./saga/userSagas";
+import discussSaga from "./saga/discussSagas";
 
 const initialState = {};
 
@@ -17,7 +19,8 @@ const middleware = [ thunk, sagaMiddleware ];
 const reducers = combineReducers({
 	user: userReducer,
 	// data: dataReducer,
-	UI: uiReducer
+	UI: uiReducer,
+	discuss: discussReducer
 });
 
 const composeEnhancers =
@@ -30,5 +33,6 @@ const store = createStore(reducers, initialState, enhancer);
 
 // sagaMiddleware.run(dataSaga);
 sagaMiddleware.run(userSaga);
+sagaMiddleware.run(discussSaga);
 
 export default store;

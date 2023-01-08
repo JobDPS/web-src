@@ -52,7 +52,7 @@ function NavBar (props) {
 	const classes = props.classes;
 	const { loading } = props.UI;
 	const { authenticated, loading: loading2 } = props.user;
-	const pages = [ "Explore", "Discuss", "Plan", "Schedule", "Social", "Companies" ];
+	const pages = [ "explore", "discuss", "plan", "schedule", "social", "companies" ];
 	const settings = [ "Profile", "Settings", "Logout" ];
 
 	const [ anchorElNav, setAnchorElNav ] = React.useState(null);
@@ -191,7 +191,11 @@ function NavBar (props) {
 							>
 								{pages.map((page) => (
 									<MenuItem key={page} onClick={handleCloseNavMenu}>
-										<Typography textAlign='center'>{page}</Typography>
+										<Link to={`/${page}`}>
+											<Typography textAlign='center' sx={{ textTransform: "capitalize" }}>
+												{page}
+											</Typography>
+										</Link>
 									</MenuItem>
 								))}
 							</Menu>
@@ -225,12 +229,14 @@ function NavBar (props) {
 						<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
 							{pages.map((page) => (
 								<div className={classes.link} key={page}>
-									<Button
-										onClick={handleCloseNavMenu}
-										sx={{ my: 2, color: "white", display: "block" }}
-									>
-										{page}
-									</Button>
+									<Link to={`/${page}`}>
+										<Button
+											onClick={handleCloseNavMenu}
+											sx={{ my: 2, color: "white", display: "block" }}
+										>
+											{page}
+										</Button>
+									</Link>
 								</div>
 							))}
 						</Box>
