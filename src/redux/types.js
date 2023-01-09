@@ -14,6 +14,8 @@ export const STOP_LOADING_UI = 'STOP_LOADING_UI';
 
 export const SET_DISCUSS = 'SET_DISCUSS';
 export const LOADING_DISCUSS = 'LOADING_DISCUSS';
+export const DISCUSS_SET_ERRORS = 'DISCUSS_SET_ERROR';
+export const DISCUSS_CLEAR_ERRORS = 'DISCUSS_CLEAR_ERRORS';
 
 // Data reducer types
 // export const SET_POSTS = 'SET_POSTS';

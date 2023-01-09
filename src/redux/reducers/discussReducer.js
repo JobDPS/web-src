@@ -1,7 +1,8 @@
 import * as types from "../types";
 
 const initialState = {
-	loading: true
+	loading: true,
+	errors: null
 };
 
 function reducer (state = initialState, action) {
@@ -15,6 +16,12 @@ function reducer (state = initialState, action) {
 			return {
 				...state,
 				loading: true
+			};
+		case types.DISCUSS_CLEAR_ERRORS:
+			return {
+				...state,
+				loading: false,
+				errors: null
 			};
 		default:
 			return state;

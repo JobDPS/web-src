@@ -13,9 +13,17 @@ import CircularProgress from "@mui/material/CircularProgress";
 import FormHelperText from "@mui/material/FormHelperText";
 
 import { connect } from "react-redux";
+import { createPost } from "../../redux/actions/discussActions";
 
 const styles = (theme) => ({
 	...theme.spread,
+	item: {
+		margin: "0 4px",
+		padding: "4px",
+		"&:hover": {
+			backgroundColor: "#e0e0e0"
+		}
+	},
 	progress: {
 		position: "absolute"
 	}
@@ -32,14 +40,26 @@ class Post extends Component {
 
 	render () {
 		const { classes } = this.props;
-
+		
 		return (
 			<Fragment>
 				<div className={classes.content}>
-					<Box>
+					<Paper
+						elevation={0}
+						className={classes.item}
+						sx={{
+							transition: `all 0.3s ease-in-out`,
+							backgroundColor: "#f6f6f6",
+							borderRadius: `${this.props.first ? "4px" : "0px"} ${this.props.first ? "4px" : "0px"} ${this.props.last
+								? "4px"
+								: "0px"} ${this.props.last ? "4px" : "0px"}`,
+							marginTop: `${this.props.first ? "4px" : "0px"}`,
+							marginBottom: `${this.props.last ? "4px" : "0px"}`
+						}}
+					>
 						<Typography>{this.props.title}</Typography>
 						<Typography>{this.props.author.username.stringValue}</Typography>
-					</Box>
+					</Paper>
 				</div>
 			</Fragment>
 		);
@@ -49,7 +69,6 @@ class Post extends Component {
 Post.propTypes = {
 	classes: PropTypes.object.isRequired,
 	// loginUser: PropTypes.func.isRequired,
-	// clearErrors: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired,
 	discuss: PropTypes.object.isRequired
