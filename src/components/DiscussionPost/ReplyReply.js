@@ -35,7 +35,7 @@ const styles = (theme) => ({
 	}
 });
 
-class Post extends Component {
+class ReplyReply extends Component {
 	state = {
 		errors: {}
 	};
@@ -66,55 +66,37 @@ class Post extends Component {
 					>
 						<Box sx={{ display: "flex", flexDirection: "row" }}>
 							<Typography variant='h4' sx={{ my: "auto" }}>
-								{this.props.post.info.vote ? this.props.post.info.vote.integerValue : 0}
+								{this.props.reply.info.vote ? this.props.reply.info.vote.integerValue : 0}
 							</Typography>
 							<Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
-								<Link to={`/discuss/${this.props.post.info.id.stringValue}`}>
-									<Typography variant='h4'>{this.props.post.info.title.stringValue}</Typography>
-									<Typography
-										variant='body1'
-										sx={{
-											maxWidth: "500px",
-											display: "-webkit-box",
-											WebkitBoxOrient: "vertical",
-											WebkitLineClamp: "2",
-											overflow: "hidden",
-											textOverflow: "ellipsis"
-										}}
-									>
-										{this.props.post.info.body.stringValue}
-									</Typography>
-								</Link>
+								<Typography
+									variant='body1'
+									sx={{
+										maxWidth: "500px",
+										display: "-webkit-box",
+										WebkitBoxOrient: "vertical",
+										WebkitLineClamp: "2",
+										overflow: "hidden",
+										textOverflow: "ellipsis"
+									}}
+								>
+									{this.props.reply.info.body.stringValue}
+								</Typography>
 								<Box sx={{ display: "flex", flexDirection: "row" }}>
-									<Link to={`/users/${this.props.post.info.author.stringValue}`}>
+									<Link to={`/users/${this.props.reply.info.author.stringValue}`}>
 										<Box sx={{ display: "flex", flexDirection: "row" }}>
 											<IconButton sx={{ p: 0 }}>
 												<Avatar
 													alt='Remy Sharp'
-													src={this.props.post.author.imageUrl.stringValue}
+													src={this.props.reply.author.imageUrl.stringValue}
 												/>
 											</IconButton>
 											<Typography variant='body2'>
-												{this.props.post.author.username.stringValue} posted{" "}
-												{dayjs(this.props.post.info.createdAt.timestampValue).fromNow()}
+												{this.props.reply.author.username.stringValue} posted{" "}
+												{dayjs(this.props.reply.info.createdAt.timestampValue).fromNow()}
 											</Typography>
 										</Box>
 									</Link>
-
-									<Box sx={{ ml: "auto" }}>
-										<Link to={`/discuss/${this.props.post.info.id.stringValue}`}>
-											<ModeCommentRoundedIcon />
-											{this.props.post.replies ? (
-												this.props.post.replies.length +
-												this.props.post.replies.reduce(
-													(a, b) => a + (b.replies ? b.replies.length : 0),
-													0
-												)
-											) : (
-												0
-											)}
-										</Link>
-									</Box>
 								</Box>
 							</Box>
 						</Box>
@@ -125,7 +107,7 @@ class Post extends Component {
 	}
 }
 
-Post.propTypes = {
+ReplyReply.propTypes = {
 	classes: PropTypes.object.isRequired,
 	// loginUser: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
@@ -145,4 +127,4 @@ const mapActionsToProps = {
 	// getDiscussData
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Post));
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(ReplyReply));

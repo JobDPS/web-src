@@ -11,11 +11,13 @@ import Footer from "./layout/Footer";
 import themeObject from "./util/theme";
 import UnAuthRoute from "./util/UnAuthRoute";
 import AuthRoute from "./util/AuthRoute";
+import UseParams from "./util/UseParams";
 // Pages
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Discuss from "./pages/Discuss";
+import DiscussPage from "./pages/DiscussPage";
 // import server from './pages/server';
 // import user from './pages/user';
 // import post from './pages/post';
@@ -52,6 +54,7 @@ class App extends Component {
 								<Route exact path='/login' element={<UnAuthRoute element={Login} />} />
 								<Route exact path='/signup' element={<UnAuthRoute element={Signup} />} />
 								<Route exact path='/discuss' element={<Discuss />} />
+								<Route exact path='/discuss/:postId' element={<UseParams element={DiscussPage} />} />
 								{/* <AuthRoute exact path='/servers/:name/channels/:channel' component={server} />
 								<Route exact path='/users/:handle/post/:postId' component={post} /> */}
 								<Route path='*' to='/' />

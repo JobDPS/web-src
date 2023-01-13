@@ -56,22 +56,23 @@ class Discuss extends Component {
 
 	render () {
 		const { classes, UI: { loading }, discuss: { allPosts, loading: loading2 } } = this.props;
+		const { authenticated, loading: loading3 } = this.props.user;
 		const { errors } = this.state;
-		const posts = !loading2 ? (
-			allPosts.map((p, idx) => {
-				return (
-					<Post
-						key={p.info.id.stringValue}
-						author={p.author}
-						title={p.info.title.stringValue}
-						first={idx === 0 ? true : false}
-						last={idx === allPosts.length - 1 ? true : false}
-					/>
-				);
-			})
-		) : (
-			<Typography>loading</Typography>
-		);
+		const posts =
+			allPosts && !loading2 ? (
+				allPosts.map((p, idx) => {
+					return (
+						<Post
+							key={p.info.id.stringValue}
+							post={p}
+							first={idx === 0 ? true : false}
+							last={idx === allPosts.length - 1 ? true : false}
+						/>
+					);
+				})
+			) : (
+				<Typography>loading</Typography>
+			);
 
 		return (
 			<Fragment>
@@ -88,7 +89,14 @@ class Discuss extends Component {
 								<SearchIcon />
 							</IconButton>
 							<Divider sx={{ height: 28, m: 0.5 }} orientation='vertical' />
-							<Button color='primary' sx={{ p: "10px" }} aria-label='create' onClick={this.handleNewPost}>
+							<Button
+								color='primary'
+								sx={{ p: "10px", ml: "12px" }}
+								aria-label='create'
+								onClick={this.handleNewPost}
+								disabled={loading3 || !authenticated}
+								variant='outlined'
+							>
 								<AddIcon />
 								New Post
 							</Button>
@@ -105,6 +113,7 @@ Discuss.propTypes = {
 	classes: PropTypes.object.isRequired,
 	// loginUser: PropTypes.func.isRequired,
 	// clearErrors: PropTypes.func.isRequired,
+	getDiscussData: PropTypes.func.isRequired,
 	createPost: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired,

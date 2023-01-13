@@ -129,7 +129,9 @@ function Footer (props) {
 				</Grid>
 				<Grid item xs={12} sm={12} md={4}>
 					<Box display='flex' justifyContent='center' alignItems='center'>
-						<Typography variant='caption'>Copyright © 2022 JobDPS</Typography>
+						<Typography variant='caption'>
+							Copyright <span style={{ fontFamily: "Roboto" }}>©</span> 2022 JobDPS
+						</Typography>
 					</Box>
 				</Grid>
 				<Grid item xs={12} sm={12} md={4}>
