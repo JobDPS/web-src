@@ -44,11 +44,21 @@ function* createReply (action) {
 	}
 }
 
+function* deletePost (action) {
+	try {
+		yield axios.delete(`/discuss/${action.payload.postId}`);
+		yield put({ type: "DISCUSS_CLEAR_ERRORS" });
+	} catch (e) {
+		yield put({ type: "DISCUSS_SET_ERROR", payload: e.response.data });
+	}
+}
+
 function* discussSaga () {
 	yield takeLatest("GET_DISCUSS_DATA", getDiscussData);
 	yield takeLatest("CREATE_DISCUSS_POST", createPost);
 	yield takeLatest("GET_DISCUSS_POST", getPost);
 	yield takeLatest("CREATE_DISCUSS_REPLY", createReply);
+	yield takeLatest("DELETE_DISCUSS_POST", deletePost);
 }
 
 export default discussSaga;

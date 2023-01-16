@@ -12,21 +12,31 @@ import TextField from "@mui/material/TextField";
 import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
-import ModeCommentRoundedIcon from "@mui/icons-material/ModeCommentRounded";
-import KeyboardArrowUpRoundedIcon from "@mui/icons-material/KeyboardArrowUpRounded";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import FormHelperText from "@mui/material/FormHelperText";
 import CircularProgress from "@mui/material/CircularProgress";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Grow from "@mui/material/Grow";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
+import SearchIcon from "@mui/icons-material/Search";
+import AddIcon from "@mui/icons-material/Add";
+import KeyboardArrowUpRoundedIcon from "@mui/icons-material/KeyboardArrowUpRounded";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import ReplyRoundedIcon from "@mui/icons-material/ReplyRounded";
+import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
+import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 
 import { connect } from "react-redux";
-import { getDiscussPost, createReply } from "../redux/actions/discussActions";
+import { getDiscussPost, createReply, deleteDiscussPost } from "../redux/actions/discussActions";
 import { clearErrors } from "../redux/actions/userActions";
 import Reply from "../components/DiscussionPost/Reply";
 
@@ -59,7 +69,9 @@ class DiscussPage extends Component {
 	state = {
 		vote: "none",
 		replyBody: "",
-		errors: {}
+		errors: {},
+		anchorEl: null,
+		deleteDialogOpen: false
 	};
 
 	componentDidMount () {
@@ -92,11 +104,52 @@ class DiscussPage extends Component {
 		this.props.createReply(this.props.match.params.postId, newReplyData);
 	};
 
+	handleClick = (event) => {
+		this.setState({ anchorEl: event.currentTarget });
+	};
+
+	handleClose = () => {
+		this.setState({ anchorEl: null });
+	};
+
+	handleDeleteDialogOpen = () => {
+		this.setState({ deleteDialogOpen: true, anchorEl: null });
+	};
+	handleDeleteDialogClose = () => {
+		this.setState({ deleteDialogOpen: false });
+	};
+	handleDeletePost = () => {
+		this.setState({ deleteDialogOpen: false });
+		this.props.deleteDiscussPost(this.props.match.params.postId);
+	};
+
 	render () {
 		dayjs.extend(relativeTime);
 		const { classes, UI: { loading }, discuss: { post, loading: loading2 } } = this.props;
 		const { authenticated, loading: loading3 } = this.props.user;
 		const { errors } = this.state;
+		const options = [ "Edit", "Delete" ];
+		const open = Boolean(this.state.anchorEl);
+
+		if (this.props.discuss.errors) {
+			const error = this.props.discuss.errors.error;
+			return (
+				<Fragment>
+					<div className={classes.toolbar} />
+					<div className={classes.content}>
+						<Paper className={classes.main} sx={{ p: "8px" }}>
+							<Typography variant='h5' sx={{ fontWeight: 500 }}>
+								{error.split(" ")[error.split(" ").length - 1] === "found." ? (
+									"Post not found"
+								) : (
+									"Internal Server Error"
+								)}
+							</Typography>
+						</Paper>
+					</div>
+				</Fragment>
+			);
+		}
 
 		const replies =
 			post && !loading2 && post.replies ? (
@@ -148,7 +201,50 @@ class DiscussPage extends Component {
 						</ToggleButtonGroup>
 
 						<Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
-							<Typography variant='h4'>{post.info.title.stringValue}</Typography>
+							<Box sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
+								<Typography variant='h4'>{post.info.title.stringValue}</Typography>
+								{authenticated &&
+								post.info.author.stringValue === this.props.user.credentials.userId ? (
+									<Fragment>
+										<IconButton
+											aria-label='more'
+											id='long-button'
+											aria-controls={open ? "long-menu" : undefined}
+											aria-expanded={open ? "true" : undefined}
+											aria-haspopup='true'
+											onClick={this.handleClick}
+											sx={{ ml: "auto" }}
+										>
+											<MoreHorizRoundedIcon />
+										</IconButton>
+										<Menu
+											id='long-menu'
+											MenuListProps={{
+												"aria-labelledby": "long-button"
+											}}
+											anchorEl={this.state.anchorEl}
+											open={open}
+											onClose={this.handleClose}
+											TransitionComponent={Grow}
+										>
+											{options.map(
+												(option) =>
+													option === "Delete" ? (
+														<MenuItem key={option} onClick={this.handleDeleteDialogOpen}>
+															{option}
+														</MenuItem>
+													) : (
+														<MenuItem key={option} onClick={this.handleClose}>
+															{option}
+														</MenuItem>
+													)
+											)}
+										</Menu>
+									</Fragment>
+								) : (
+									<span />
+								)}
+							</Box>
 
 							<Box sx={{ display: "flex", flexDirection: "row" }}>
 								<Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -175,6 +271,23 @@ class DiscussPage extends Component {
 			) : (
 				<Typography>loading</Typography>
 			);
+
+		const deleteDialog = (
+			<Dialog open={this.state.deleteDialogOpen} onClose={this.handleDeleteDialogClose}>
+				<DialogTitle>Delete Post</DialogTitle>
+				<DialogContent>
+					<DialogContentText>Are you sure you want to delete this post?</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={this.handleDeleteDialogClose} variant='outlined'>
+						Cancel
+					</Button>
+					<Button onClick={this.handleDeletePost} color='error' variant='outlined'>
+						Delete
+					</Button>
+				</DialogActions>
+			</Dialog>
+		);
 
 		const form = authenticated ? (
 			<Paper
@@ -234,19 +347,21 @@ class DiscussPage extends Component {
 					<Paper className={classes.main}>
 						<Box>{posts}</Box>
 						<Box sx={{ display: "flex", flexDirection: "row" }}>
-							<ModeCommentRoundedIcon />
+							<ForumRoundedIcon />
 							<Typography>
-								Comments{" "}
+								Comments{" ("}
 								{post && post.replies ? (
 									post.replies.length +
 									post.replies.reduce((a, b) => a + (b.replies ? b.replies.length : 0), 0)
 								) : (
 									0
 								)}
+								{")"}
 							</Typography>
 						</Box>
 						<Box>{form}</Box>
 						<Box>{replies}</Box>
+						{deleteDialog}
 					</Paper>
 				</div>
 			</Fragment>
@@ -259,6 +374,7 @@ DiscussPage.propTypes = {
 	// loginUser: PropTypes.func.isRequired,
 	clearErrors: PropTypes.func.isRequired,
 	getDiscussPost: PropTypes.func.isRequired,
+	deleteDiscussPost: PropTypes.func.isRequired,
 	createReply: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired,
@@ -275,6 +391,7 @@ const mapActionsToProps = {
 	// loginUser,
 	clearErrors,
 	getDiscussPost,
+	deleteDiscussPost,
 	createReply
 };
 

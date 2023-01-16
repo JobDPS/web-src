@@ -16,3 +16,7 @@ export const getDiscussPost = (postId) => (dispatch) => {
 export const createReply = (postId, newReplyData) => (dispatch) => {
 	dispatch({ type: "CREATE_DISCUSS_REPLY", payload: { postId, newReplyData } });
 };
+
+export const deleteDiscussPost = (postId) => (dispatch) => {
+	dispatch({ type: "DELETE_DISCUSS_POST", payload: { postId } });
+};

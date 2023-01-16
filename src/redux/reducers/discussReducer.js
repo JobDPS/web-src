@@ -23,6 +23,12 @@ function reducer (state = initialState, action) {
 				loading: false,
 				errors: null
 			};
+		case types.DISCUSS_SET_ERRORS:
+			return {
+				...state,
+				loading: false,
+				errors: action.payload
+			};
 		default:
 			return state;
 	}
