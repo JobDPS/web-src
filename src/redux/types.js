@@ -11,6 +11,8 @@ export const LOADING_UI = 'LOADING_UI';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 export const LOADING_DATA = 'LOADING_DATA';
 export const STOP_LOADING_UI = 'STOP_LOADING_UI';
+export const CLOSE_FORM = 'CLOSE_FORM';
+export const OPEN_FORM = 'OPEN_FORM';
 
 export const SET_DISCUSS = 'SET_DISCUSS';
 export const LOADING_DISCUSS = 'LOADING_DISCUSS';

@@ -36,8 +36,8 @@ import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 
 import { connect } from "react-redux";
-import { getDiscussPost, createReply, deleteDiscussPost } from "../redux/actions/discussActions";
-import { clearErrors } from "../redux/actions/userActions";
+import { getDiscussPost, createReply, deleteDiscussPost, editDiscussPost } from "../redux/actions/discussActions";
+import { clearErrors, openForm } from "../redux/actions/userActions";
 import Reply from "../components/DiscussionPost/Reply";
 
 const styles = (theme) => ({
@@ -71,7 +71,10 @@ class DiscussPage extends Component {
 		replyBody: "",
 		errors: {},
 		anchorEl: null,
-		deleteDialogOpen: false
+		deleteDialogOpen: false,
+		editing: false,
+		postBody: "",
+		postTitle: ""
 	};
 
 	componentDidMount () {
@@ -123,6 +126,27 @@ class DiscussPage extends Component {
 		this.props.deleteDiscussPost(this.props.match.params.postId);
 	};
 
+	handleEditPost = () => {
+		this.setState({
+			editing: true,
+			anchorEl: null,
+			postBody: this.props.discuss.post.info.body.stringValue,
+			postTitle: this.props.discuss.post.info.title.stringValue
+		});
+		this.props.openForm();
+	};
+	handleEditSubmit = () => {
+		const newPostData = {
+			title: this.state.postTitle,
+			body: this.state.postBody
+		};
+		this.props.editDiscussPost(this.props.match.params.postId, newPostData);
+	};
+	handleEditCancel = () => {
+		this.setState({ editing: false });
+		this.props.clearErrors();
+	};
+
 	render () {
 		dayjs.extend(relativeTime);
 		const { classes, UI: { loading }, discuss: { post, loading: loading2 } } = this.props;
@@ -130,6 +154,7 @@ class DiscussPage extends Component {
 		const { errors } = this.state;
 		const options = [ "Edit", "Delete" ];
 		const open = Boolean(this.state.anchorEl);
+		if (this.props.UI.closeForm && this.state.editing) this.setState({ editing: false });
 
 		if (this.props.discuss.errors) {
 			const error = this.props.discuss.errors.error;
@@ -199,12 +224,35 @@ class DiscussPage extends Component {
 								<KeyboardArrowDownRoundedIcon />
 							</ToggleButton>
 						</ToggleButtonGroup>
-
 						<Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
 							<Box sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
-								<Typography variant='h4'>{post.info.title.stringValue}</Typography>
+								{this.state.editing ? (
+									<Box sx={{ width: "100%", p: "8px" }}>
+										<TextField
+											name='postTitle'
+											id='postTitle'
+											error={errors.postTitle || errors.error ? true : false}
+											value={this.state.postTitle}
+											onChange={this.handleChange}
+											fullWidth
+											variant='outlined'
+											placeholder='Write your title here...'
+											defaultValue={this.state.postTitle}
+											disabled={loading || loading2}
+											label='Title'
+											sx={{ ".MuiInputBase-input": { fontSize: "2.125rem" } }}
+										/>
+										<FormHelperText error={errors.postTitle || errors.error ? true : false}>
+											{errors.postTitle} {errors.error}
+										</FormHelperText>
+									</Box>
+								) : (
+									<Typography variant='h4'>{post.info.title.stringValue}</Typography>
+								)}
+
 								{authenticated &&
-								post.info.author.stringValue === this.props.user.credentials.userId ? (
+								post.info.author.stringValue === this.props.user.credentials.userId &&
+								!this.state.editing ? (
 									<Fragment>
 										<IconButton
 											aria-label='more'
@@ -231,6 +279,10 @@ class DiscussPage extends Component {
 												(option) =>
 													option === "Delete" ? (
 														<MenuItem key={option} onClick={this.handleDeleteDialogOpen}>
+															{option}
+														</MenuItem>
+													) : option === "Edit" ? (
+														<MenuItem key={option} onClick={this.handleEditPost}>
 															{option}
 														</MenuItem>
 													) : (
@@ -264,7 +316,56 @@ class DiscussPage extends Component {
 								</Box>
 							</Box>
 
-							<Typography variant='body1'>{post.info.body.stringValue}</Typography>
+							{this.state.editing ? (
+								<Box sx={{ p: "8px" }}>
+									<TextField
+										name='postBody'
+										id='postBody'
+										error={errors.postBody || errors.error ? true : false}
+										value={this.state.postBody}
+										onChange={this.handleChange}
+										multiline
+										rows={2}
+										fullWidth
+										variant='outlined'
+										placeholder='Write your body here...'
+										defaultValue={this.state.postBody}
+										disabled={loading || loading2}
+										label='Body'
+									/>
+									<FormHelperText error={errors.postBody || errors.error ? true : false}>
+										{errors.postBody} {errors.error}
+									</FormHelperText>
+								</Box>
+							) : (
+								<Typography variant='body1'>{post.info.body.stringValue}</Typography>
+							)}
+
+							{this.state.editing ? (
+								<Box sx={{ ml: "auto", p: "8px" }}>
+									<Button
+										onClick={this.handleEditCancel}
+										variant='outlined'
+										sx={{ mr: "8px" }}
+										disabled={loading}
+									>
+										Cancel
+									</Button>
+									<Button
+										onClick={this.handleEditSubmit}
+										color='success'
+										variant='outlined'
+										disabled={loading}
+									>
+										Save
+										{loading && (
+											<CircularProgress size={30} className={classes.progress} color='success' />
+										)}
+									</Button>
+								</Box>
+							) : (
+								<span />
+							)}
 						</Box>
 					</Box>
 				</Paper>
@@ -371,11 +472,12 @@ class DiscussPage extends Component {
 
 DiscussPage.propTypes = {
 	classes: PropTypes.object.isRequired,
-	// loginUser: PropTypes.func.isRequired,
 	clearErrors: PropTypes.func.isRequired,
 	getDiscussPost: PropTypes.func.isRequired,
 	deleteDiscussPost: PropTypes.func.isRequired,
 	createReply: PropTypes.func.isRequired,
+	editDiscussPost: PropTypes.func.isRequired,
+	openForm: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired,
 	discuss: PropTypes.object.isRequired
@@ -388,11 +490,12 @@ const mapStateToProps = (state) => ({
 });
 
 const mapActionsToProps = {
-	// loginUser,
 	clearErrors,
 	getDiscussPost,
 	deleteDiscussPost,
-	createReply
+	createReply,
+	editDiscussPost,
+	openForm
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(DiscussPage));

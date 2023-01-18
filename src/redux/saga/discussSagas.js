@@ -47,9 +47,23 @@ function* createReply (action) {
 function* deletePost (action) {
 	try {
 		yield axios.delete(`/discuss/${action.payload.postId}`);
-		yield put({ type: "DISCUSS_CLEAR_ERRORS" });
+		yield axios.get(`/discuss/${action.payload.postId}`);
+		yield put({ type: "DISCUSS_SET_ERROR", payload: { error: "Server error" } });
 	} catch (e) {
 		yield put({ type: "DISCUSS_SET_ERROR", payload: e.response.data });
+	}
+}
+
+function* editPost (action) {
+	try {
+		yield put({ type: "LOADING_UI" });
+		yield axios.patch(`/discuss/${action.payload.postId}`, action.payload.newPostData);
+		const res = yield axios.get(`/discuss/${action.payload.postId}`);
+		yield put({ type: "SET_DISCUSS", payload: res.data });
+		yield put({ type: "CLOSE_FORM" });
+		yield put({ type: "CLEAR_ERRORS" });
+	} catch (e) {
+		yield put({ type: "SET_ERRORS", payload: e.response.data });
 	}
 }
 
@@ -59,6 +73,7 @@ function* discussSaga () {
 	yield takeLatest("GET_DISCUSS_POST", getPost);
 	yield takeLatest("CREATE_DISCUSS_REPLY", createReply);
 	yield takeLatest("DELETE_DISCUSS_POST", deletePost);
+	yield takeLatest("EDIT_DISCUSS_POST", editPost);
 }
 
 export default discussSaga;

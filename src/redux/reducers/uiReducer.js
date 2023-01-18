@@ -2,7 +2,8 @@ import * as types from "../types";
 
 const initialState = {
 	loading: false,
-	errors: null
+	errors: null,
+	closeForm: false
 };
 
 function reducer (state = initialState, action) {
@@ -11,7 +12,8 @@ function reducer (state = initialState, action) {
 			return {
 				...state,
 				loading: false,
-				errors: action.payload
+				errors: action.payload,
+				closeForm: false
 			};
 		case types.CLEAR_ERRORS:
 			return {
@@ -22,13 +24,24 @@ function reducer (state = initialState, action) {
 		case types.LOADING_UI:
 			return {
 				...state,
-				loading: true
+				loading: true,
+				closeForm: false
 			};
 		case types.STOP_LOADING_UI:
 			return {
 				...state,
 				loading: false
 			};
+		case types.CLOSE_FORM:
+			return {
+				...state,
+				closeForm: true
+			}
+		case types.OPEN_FORM:
+			return {
+				...state,
+				closeForm: false
+			}
 		default:
 			return state;
 	}

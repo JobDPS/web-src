@@ -23,6 +23,10 @@ export const clearErrors = () => (dispatch) => {
 	dispatch({type: "CLEAR_ERRORS"});
 };
 
+export const openForm = () => (dispatch) => {
+	dispatch({type: "OPEN_FORM"});
+};
+
 // export const uploadImage = (formData) => (dispatch) => {
 // 	dispatch({ type: LOADING_USER });
 // 	axios
