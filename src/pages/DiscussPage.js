@@ -183,6 +183,7 @@ class DiscussPage extends Component {
 						<Reply
 							key={p.info.id.stringValue}
 							reply={p}
+							postId={post.info.id.stringValue}
 							first={idx === 0 ? true : false}
 							last={idx === post.replies.length - 1 ? true : false}
 						/>
@@ -431,7 +432,6 @@ class DiscussPage extends Component {
 						disabled={loading || loading2}
 						sx={{ ml: "auto", mt: "8px" }}
 					>
-						<ReplyRoundedIcon />
 						<Typography variant='body1'>Comment</Typography>
 						{loading && <CircularProgress size={30} className={classes.progress} />}
 					</Button>

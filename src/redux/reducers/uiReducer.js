@@ -19,7 +19,8 @@ function reducer (state = initialState, action) {
 			return {
 				...state,
 				loading: false,
-				errors: null
+				errors: null,
+				closeForm: false
 			};
 		case types.LOADING_UI:
 			return {
