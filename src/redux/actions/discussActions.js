@@ -25,7 +25,14 @@ export const deleteDiscussPost = (postId) => (dispatch) => {
 	dispatch({ type: "DELETE_DISCUSS_POST", payload: { postId } });
 };
 
+export const deleteDiscussPostReply = (postId, replyId) => (dispatch) => {
+	dispatch({ type: "DELETE_DISCUSS_POSTREPLY", payload: { postId, replyId } });
+};
+
 export const editDiscussPost = (postId, newPostData) => (dispatch) => {
 	dispatch({ type: "EDIT_DISCUSS_POST", payload: { postId, newPostData } });
 };
 
+export const editDiscussPostReply = (postId, replyId, newPostReplyData) => (dispatch) => {
+	dispatch({ type: "EDIT_DISCUSS_POSTREPLY", payload: { postId, replyId, newPostReplyData } });
+};

@@ -86,6 +86,10 @@ class DiscussPage extends Component {
 		if (this.props.UI.errors && JSON.stringify(this.props.UI.errors) !== JSON.stringify(this.state.errors))
 			this.setState({ errors: this.props.UI.errors });
 		if (!this.props.UI.errors && Object.keys(this.state.errors).length !== 0) this.setState({ errors: {} });
+		if (this.props.UI.closeForm && this.state.editing) {
+			this.setState({ editing: false });
+			this.props.openForm();
+		}
 	}
 
 	handleChangeVote = (event, nextValue) => {
@@ -110,7 +114,6 @@ class DiscussPage extends Component {
 	handleClick = (event) => {
 		this.setState({ anchorEl: event.currentTarget });
 	};
-
 	handleClose = () => {
 		this.setState({ anchorEl: null });
 	};
@@ -154,7 +157,6 @@ class DiscussPage extends Component {
 		const { errors } = this.state;
 		const options = [ "Edit", "Delete" ];
 		const open = Boolean(this.state.anchorEl);
-		if (this.props.UI.closeForm && this.state.editing) this.setState({ editing: false });
 
 		if (this.props.discuss.errors) {
 			const error = this.props.discuss.errors.error;

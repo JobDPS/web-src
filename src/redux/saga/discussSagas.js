@@ -70,10 +70,38 @@ function* deletePost (action) {
 	}
 }
 
+function* deletePostReply (action) {
+	try {
+		yield axios.delete(`/discuss/${action.payload.postId}/replies/${action.payload.replyId}`);
+		const res = yield axios.get(`/discuss/${action.payload.postId}`);
+		yield put({ type: "SET_DISCUSS", payload: res.data });
+		yield put({ type: "CLEAR_ERRORS" });
+		yield put({ type: "CLOSE_FORM" });
+	} catch (e) {
+		yield put({ type: "SET_ERRORS", payload: e.response.data });
+	}
+}
+
 function* editPost (action) {
 	try {
 		yield put({ type: "LOADING_UI" });
 		yield axios.patch(`/discuss/${action.payload.postId}`, action.payload.newPostData);
+		const res = yield axios.get(`/discuss/${action.payload.postId}`);
+		yield put({ type: "SET_DISCUSS", payload: res.data });
+		yield put({ type: "CLEAR_ERRORS" });
+		yield put({ type: "CLOSE_FORM" });
+	} catch (e) {
+		yield put({ type: "SET_ERRORS", payload: e.response.data });
+	}
+}
+
+function* editPostReply (action) {
+	try {
+		yield put({ type: "LOADING_UI" });
+		yield axios.patch(
+			`/discuss/${action.payload.postId}/replies/${action.payload.replyId}`,
+			action.payload.newPostReplyData
+		);
 		const res = yield axios.get(`/discuss/${action.payload.postId}`);
 		yield put({ type: "SET_DISCUSS", payload: res.data });
 		yield put({ type: "CLEAR_ERRORS" });
@@ -90,7 +118,9 @@ function* discussSaga () {
 	yield takeLatest("CREATE_DISCUSS_REPLY", createReply);
 	yield takeLatest("CREATE_DISCUSS_REPLYREPLY", createReplyReply);
 	yield takeLatest("DELETE_DISCUSS_POST", deletePost);
+	yield takeLatest("DELETE_DISCUSS_POSTREPLY", deletePostReply);
 	yield takeLatest("EDIT_DISCUSS_POST", editPost);
+	yield takeLatest("EDIT_DISCUSS_POSTREPLY", editPostReply);
 }
 
 export default discussSaga;

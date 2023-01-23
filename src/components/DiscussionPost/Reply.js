@@ -19,14 +19,23 @@ import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Grow from "@mui/material/Grow";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 import ModeCommentRoundedIcon from "@mui/icons-material/ModeCommentRounded";
 import KeyboardArrowUpRoundedIcon from "@mui/icons-material/KeyboardArrowUpRounded";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import ReplyRoundedIcon from "@mui/icons-material/ReplyRounded";
+import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 
 import { connect } from "react-redux";
-import { createReplyReply } from "../../redux/actions/discussActions";
+import { createReplyReply, deleteDiscussPostReply, editDiscussPostReply } from "../../redux/actions/discussActions";
 import { clearErrors, openForm } from "../../redux/actions/userActions";
 import ReplyReply from "./ReplyReply";
 
@@ -48,7 +57,11 @@ class Reply extends Component {
 	state = {
 		replying: false,
 		replyBody: "",
-		errors: {}
+		replyBodyNew: "",
+		errors: {},
+		anchorEl: null,
+		deleteDialogOpen: false,
+		editing: false
 	};
 
 	componentDidMount () {
@@ -59,11 +72,18 @@ class Reply extends Component {
 		if (this.props.UI.errors && JSON.stringify(this.props.UI.errors) !== JSON.stringify(this.state.errors))
 			this.setState({ errors: this.props.UI.errors });
 		if (!this.props.UI.errors && Object.keys(this.state.errors).length !== 0) this.setState({ errors: {} });
-		if (this.state.replying && this.props.UI.closeForm) {
-			this.setState({ replying: false });
+		if ((this.state.replying || this.state.editing) && this.props.UI.closeForm) {
+			this.setState({ replying: false, editing: false });
 			this.props.openForm();
 		}
 	}
+
+	handleClick = (event) => {
+		this.setState({ anchorEl: event.currentTarget });
+	};
+	handleClose = () => {
+		this.setState({ anchorEl: null });
+	};
 
 	handleChange = (event) => {
 		this.setState({
@@ -87,11 +107,43 @@ class Reply extends Component {
 		this.props.createReplyReply(this.props.postId, this.props.reply.info.id.stringValue, newReplyData);
 	};
 
+	handleDeleteDialogOpen = () => {
+		this.setState({ deleteDialogOpen: true, anchorEl: null });
+	};
+	handleDeleteDialogClose = () => {
+		this.setState({ deleteDialogOpen: false });
+	};
+	handleDeletePostReply = () => {
+		this.setState({ deleteDialogOpen: false });
+		this.props.deleteDiscussPostReply(this.props.postId, this.props.reply.info.id.stringValue);
+	};
+
+	handleEditPost = () => {
+		this.setState({
+			editing: true,
+			anchorEl: null,
+			replyBodyNew: this.props.reply.info.body.stringValue
+		});
+		this.props.openForm();
+	};
+	handleEditSubmit = () => {
+		const newReplyData = {
+			body: this.state.replyBodyNew
+		};
+		this.props.editDiscussPostReply(this.props.postId, this.props.reply.info.id.stringValue, newReplyData);
+	};
+	handleEditCancel = () => {
+		this.setState({ editing: false });
+		this.props.clearErrors();
+	};
+
 	render () {
 		dayjs.extend(relativeTime);
 		const { classes, UI: { loading }, discuss: { post, loading: loading2 } } = this.props;
 		const { authenticated, loading: loading3 } = this.props.user;
 		const { errors } = this.state;
+		const options = [ "Edit", "Delete" ];
+		const open = Boolean(this.state.anchorEl);
 
 		const replies = this.props.reply.replies ? (
 			this.props.reply.replies.map((p, idx) => {
@@ -164,6 +216,23 @@ class Reply extends Component {
 				<span />
 			);
 
+		const deleteDialog = (
+			<Dialog open={this.state.deleteDialogOpen} onClose={this.handleDeleteDialogClose}>
+				<DialogTitle>Delete Post</DialogTitle>
+				<DialogContent>
+					<DialogContentText>Are you sure you want to delete this reply?</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={this.handleDeleteDialogClose} variant='outlined'>
+						Cancel
+					</Button>
+					<Button onClick={this.handleDeletePostReply} color='error' variant='outlined'>
+						Delete
+					</Button>
+				</DialogActions>
+			</Dialog>
+		);
+
 		return (
 			<Fragment>
 				<div className={classes.content}>
@@ -181,11 +250,13 @@ class Reply extends Component {
 						}}
 					>
 						<Box sx={{ display: "flex", flexDirection: "row" }}>
-							<Link to={`/users/${this.props.reply.info.author.stringValue}`}>
-								<IconButton sx={{ p: 0, my: "auto" }}>
-									<Avatar alt='Remy Sharp' src={this.props.reply.author.imageUrl.stringValue} />
-								</IconButton>
-							</Link>
+							<Box sx={{ my: "auto" }}>
+								<Link to={`/users/${this.props.reply.info.author.stringValue}`}>
+									<IconButton sx={{ p: 0 }}>
+										<Avatar alt='Remy Sharp' src={this.props.reply.author.imageUrl.stringValue} />
+									</IconButton>
+								</Link>
+							</Box>
 							<Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
 								<Box sx={{ display: "flex", flexDirection: "row" }}>
 									<Link to={`/users/${this.props.reply.info.author.stringValue}`}>
@@ -215,23 +286,115 @@ class Reply extends Component {
 									</ToggleButtonGroup>
 								</Box>
 								<Box sx={{ display: "flex", flexDirection: "row" }}>
-									<Typography
-										variant='body1'
-										sx={{
-											maxWidth: "500px",
-											display: "-webkit-box",
-											WebkitBoxOrient: "vertical",
-											WebkitLineClamp: "2",
-											overflow: "hidden",
-											textOverflow: "ellipsis"
-										}}
-									>
-										{this.props.reply.info.body.stringValue}
-									</Typography>
+									{this.state.editing ? (
+										<Box sx={{ p: "8px", width: "100%" }}>
+											<TextField
+												name='replyBodyNew'
+												id='replyBodyNew'
+												error={errors.replyBodyNew || errors.error ? true : false}
+												value={this.state.replyBodyNew}
+												onChange={this.handleChange}
+												fullWidth
+												variant='outlined'
+												placeholder='Write your body here...'
+												defaultValue={this.state.postBody}
+												disabled={loading || loading2}
+												label='Reply Body'
+											/>
+											<FormHelperText error={errors.replyBodyNew || errors.error ? true : false}>
+												{errors.replyBodyNew} {errors.error}
+											</FormHelperText>
+										</Box>
+									) : (
+										<Typography variant='body1'>
+											{this.props.reply.info.body.stringValue}
+										</Typography>
+									)}
 								</Box>
-								{authenticated && !this.state.replying ? (
-									<Box sx={{ ml: "auto" }}>
-										<Button variant='outlined' sx={{ mt: "8px" }} onClick={this.handleReply}>
+
+								{this.state.editing ? (
+									<Box sx={{ ml: "auto", p: "8px" }}>
+										<Button
+											onClick={this.handleEditCancel}
+											variant='outlined'
+											sx={{ mr: "8px" }}
+											disabled={loading}
+										>
+											Cancel
+										</Button>
+										<Button
+											onClick={this.handleEditSubmit}
+											color='success'
+											variant='outlined'
+											disabled={loading}
+										>
+											Save
+											{loading && (
+												<CircularProgress
+													size={30}
+													className={classes.progress}
+													color='success'
+												/>
+											)}
+										</Button>
+									</Box>
+								) : (
+									<span />
+								)}
+
+								{authenticated && !this.state.replying && !this.state.editing ? (
+									<Box sx={{ ml: "auto", mt: "8px" }}>
+										{authenticated &&
+										post.info.author.stringValue === this.props.user.credentials.userId &&
+										!this.state.editing ? (
+											<Fragment>
+												<IconButton
+													aria-label='more'
+													id='long-button'
+													aria-controls={open ? "long-menu" : undefined}
+													aria-expanded={open ? "true" : undefined}
+													aria-haspopup='true'
+													onClick={this.handleClick}
+													sx={{ ml: "auto" }}
+												>
+													<MoreHorizRoundedIcon />
+												</IconButton>
+												<Menu
+													id='long-menu'
+													MenuListProps={{
+														"aria-labelledby": "long-button"
+													}}
+													anchorEl={this.state.anchorEl}
+													open={open}
+													onClose={this.handleClose}
+													TransitionComponent={Grow}
+												>
+													{options.map(
+														(option) =>
+															option === "Delete" ? (
+																<MenuItem
+																	key={option}
+																	onClick={this.handleDeleteDialogOpen}
+																>
+																	{option}
+																</MenuItem>
+															) : option === "Edit" ? (
+																<MenuItem key={option} onClick={this.handleEditPost}>
+																	{option}
+																</MenuItem>
+															) : (
+																<MenuItem key={option} onClick={this.handleClose}>
+																	{option}
+																</MenuItem>
+															)
+													)}
+												</Menu>
+											</Fragment>
+										) : (
+											<span />
+										)}
+
+										<Button variant='outlined' onClick={this.handleReply}>
 											<ReplyRoundedIcon />
 											<Typography variant='body1'>Reply</Typography>
 										</Button>
@@ -242,6 +405,7 @@ class Reply extends Component {
 							</Box>
 						</Box>
 						{form}
+						{deleteDialog}
 						{replies}
 					</Paper>
 				</div>
@@ -253,6 +417,8 @@ class Reply extends Component {
 Reply.propTypes = {
 	classes: PropTypes.object.isRequired,
 	createReplyReply: PropTypes.func.isRequired,
+	deleteDiscussPostReply: PropTypes.func.isRequired,
+	editDiscussPostReply: PropTypes.func.isRequired,
 	clearErrors: PropTypes.func.isRequired,
 	openForm: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
@@ -268,6 +434,8 @@ const mapStateToProps = (state) => ({
 
 const mapActionsToProps = {
 	createReplyReply,
+	deleteDiscussPostReply,
+	editDiscussPostReply,
 	clearErrors,
 	openForm
 };
