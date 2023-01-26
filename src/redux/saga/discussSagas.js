@@ -60,6 +60,22 @@ function* createReplyReply (action) {
 	}
 }
 
+function* createReplyReply2 (action) {
+	try {
+		yield put({ type: "LOADING_UI" });
+		yield axios.post(
+			`/discuss/${action.payload.postId}/replies/${action.payload.replyId}/replies/${action.payload.replyId2}`,
+			action.payload.newReplyData
+		);
+		const res = yield axios.get(`/discuss/${action.payload.postId}`);
+		yield put({ type: "SET_DISCUSS", payload: res.data });
+		yield put({ type: "CLEAR_ERRORS" });
+		yield put({ type: "CLOSE_FORM" });
+	} catch (e) {
+		yield put({ type: "SET_ERRORS", payload: e.response.data });
+	}
+}
+
 function* deletePost (action) {
 	try {
 		yield axios.delete(`/discuss/${action.payload.postId}`);
@@ -73,6 +89,20 @@ function* deletePost (action) {
 function* deletePostReply (action) {
 	try {
 		yield axios.delete(`/discuss/${action.payload.postId}/replies/${action.payload.replyId}`);
+		const res = yield axios.get(`/discuss/${action.payload.postId}`);
+		yield put({ type: "SET_DISCUSS", payload: res.data });
+		yield put({ type: "CLEAR_ERRORS" });
+		yield put({ type: "CLOSE_FORM" });
+	} catch (e) {
+		yield put({ type: "SET_ERRORS", payload: e.response.data });
+	}
+}
+
+function* deletePostReplyReply (action) {
+	try {
+		yield axios.delete(
+			`/discuss/${action.payload.postId}/replies/${action.payload.replyId}/replies/${action.payload.replyReplyId}`
+		);
 		const res = yield axios.get(`/discuss/${action.payload.postId}`);
 		yield put({ type: "SET_DISCUSS", payload: res.data });
 		yield put({ type: "CLEAR_ERRORS" });
@@ -111,16 +141,36 @@ function* editPostReply (action) {
 	}
 }
 
+function* editPostReplyReply (action) {
+	try {
+		yield put({ type: "LOADING_UI" });
+		yield axios.patch(
+			`/discuss/${action.payload.postId}/replies/${action.payload.replyId}/replies/${action.payload
+				.replyReplyId}`,
+			action.payload.newPostReplyData
+		);
+		const res = yield axios.get(`/discuss/${action.payload.postId}`);
+		yield put({ type: "SET_DISCUSS", payload: res.data });
+		yield put({ type: "CLEAR_ERRORS" });
+		yield put({ type: "CLOSE_FORM" });
+	} catch (e) {
+		yield put({ type: "SET_ERRORS", payload: e.response.data });
+	}
+}
+
 function* discussSaga () {
 	yield takeLatest("GET_DISCUSS_DATA", getDiscussData);
 	yield takeLatest("CREATE_DISCUSS_POST", createPost);
 	yield takeLatest("GET_DISCUSS_POST", getPost);
 	yield takeLatest("CREATE_DISCUSS_REPLY", createReply);
 	yield takeLatest("CREATE_DISCUSS_REPLYREPLY", createReplyReply);
+	yield takeLatest("CREATE_DISCUSS_REPLYREPLY2", createReplyReply2);
 	yield takeLatest("DELETE_DISCUSS_POST", deletePost);
 	yield takeLatest("DELETE_DISCUSS_POSTREPLY", deletePostReply);
+	yield takeLatest("DELETE_DISCUSS_POSTREPLYREPLY", deletePostReplyReply);
 	yield takeLatest("EDIT_DISCUSS_POST", editPost);
 	yield takeLatest("EDIT_DISCUSS_POSTREPLY", editPostReply);
+	yield takeLatest("EDIT_DISCUSS_POSTREPLYREPLY", editPostReplyReply);
 }
 
 export default discussSaga;

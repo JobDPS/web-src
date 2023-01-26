@@ -90,6 +90,13 @@ class DiscussPage extends Component {
 			this.setState({ editing: false });
 			this.props.openForm();
 		}
+		if (
+			prevProps.discuss.post &&
+			prevProps.discuss.post.replies &&
+			this.props.discuss.post.replies &&
+			prevProps.discuss.post.replies.length !== this.props.discuss.post.replies.length
+		)
+			this.setState({ replyBody: "" });
 	}
 
 	handleChangeVote = (event, nextValue) => {

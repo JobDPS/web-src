@@ -73,7 +73,7 @@ class Reply extends Component {
 			this.setState({ errors: this.props.UI.errors });
 		if (!this.props.UI.errors && Object.keys(this.state.errors).length !== 0) this.setState({ errors: {} });
 		if ((this.state.replying || this.state.editing) && this.props.UI.closeForm) {
-			this.setState({ replying: false, editing: false });
+			this.setState({ replying: false, editing: false, replyBody: "" });
 			this.props.openForm();
 		}
 	}
@@ -150,6 +150,8 @@ class Reply extends Component {
 				return (
 					<ReplyReply
 						key={p.info.id.stringValue}
+						postId={this.props.postId}
+						replyId={this.props.reply.info.id.stringValue}
 						reply={p}
 						first={idx === 0 ? true : false}
 						last={idx === this.props.reply.replies.length - 1 ? true : false}
@@ -291,7 +293,13 @@ class Reply extends Component {
 											<TextField
 												name='replyBodyNew'
 												id='replyBodyNew'
-												error={errors.replyBodyNew || errors.error ? true : false}
+												error={
+													errors[this.props.reply.info.id.stringValue] || errors.error ? (
+														true
+													) : (
+														false
+													)
+												}
 												value={this.state.replyBodyNew}
 												onChange={this.handleChange}
 												fullWidth
@@ -301,8 +309,16 @@ class Reply extends Component {
 												disabled={loading || loading2}
 												label='Reply Body'
 											/>
-											<FormHelperText error={errors.replyBodyNew || errors.error ? true : false}>
-												{errors.replyBodyNew} {errors.error}
+											<FormHelperText
+												error={
+													errors[this.props.reply.info.id.stringValue] || errors.error ? (
+														true
+													) : (
+														false
+													)
+												}
+											>
+												{errors[this.props.reply.info.id.stringValue]} {errors.error}
 											</FormHelperText>
 										</Box>
 									) : (
