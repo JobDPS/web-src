@@ -41,17 +41,18 @@ const styles = (theme) => ({
 	}
 });
 
-class Discuss extends Component {
+class Plan extends Component {
 	state = {
 		errors: {}
 	};
 
 	componentDidMount () {
-		this.props.getDiscussData();
+        if (this.props.user.authenticated)
+		    this.props.getDiscussData();
 	}
 
 	handleNewPost = () => {
-		this.props.createPost({ body: "test post body 3", title: "test post title 3" });
+		// this.props.createPost({ body: "test post body 3", title: "test post title 3" });
 	};
 
 	render () {
@@ -89,18 +90,17 @@ class Discuss extends Component {
 								<SearchIcon />
 							</IconButton>
 							<Divider sx={{ height: 28, m: 0.5 }} orientation='vertical' />
-							<Link to='/discuss/new'>
-								<Button
-									color='primary'
-									sx={{ p: "10px", ml: "12px" }}
-									aria-label='create'
-									disabled={loading3 || !authenticated}
-									variant='outlined'
-								>
-									<AddIcon />
-									New Post
-								</Button>
-							</Link>
+							<Button
+								color='primary'
+								sx={{ p: "10px", ml: "12px" }}
+								aria-label='create'
+								onClick={this.handleNewPost}
+								disabled={loading3 || !authenticated}
+								variant='outlined'
+							>
+								<AddIcon />
+								New Post
+							</Button>
 						</Paper>
 						<Box>{posts}</Box>
 					</Paper>
@@ -110,7 +110,7 @@ class Discuss extends Component {
 	}
 }
 
-Discuss.propTypes = {
+Plan.propTypes = {
 	classes: PropTypes.object.isRequired,
 	// loginUser: PropTypes.func.isRequired,
 	// clearErrors: PropTypes.func.isRequired,
@@ -134,4 +134,4 @@ const mapActionsToProps = {
 	createPost
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Discuss));
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Plan));

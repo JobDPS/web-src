@@ -17,10 +17,9 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Discuss from "./pages/Discuss";
+import DiscussNew from "./pages/DiscussNew";
 import DiscussPage from "./pages/DiscussPage";
-// import server from './pages/server';
-// import user from './pages/user';
-// import post from './pages/post';
+import Plan from "./pages/Plan";
 
 import axios from "axios";
 
@@ -54,7 +53,9 @@ class App extends Component {
 								<Route exact path='/login' element={<UnAuthRoute element={Login} />} />
 								<Route exact path='/signup' element={<UnAuthRoute element={Signup} />} />
 								<Route exact path='/discuss' element={<Discuss />} />
+								<Route exact path='/discuss/new' element={<AuthRoute element={DiscussNew} />} />
 								<Route exact path='/discuss/:postId' element={<UseParams element={DiscussPage} />} />
+								<Route exact path='/plan' element={<Plan />} />
 								{/* <AuthRoute exact path='/servers/:name/channels/:channel' component={server} />
 								<Route exact path='/users/:handle/post/:postId' component={post} /> */}
 								<Route path='*' to='/' />

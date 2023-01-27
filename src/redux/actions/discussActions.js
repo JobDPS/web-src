@@ -5,8 +5,8 @@ export const getDiscussData = () => (dispatch) => {
 	dispatch({ type: "GET_DISCUSS_DATA" });
 };
 
-export const createPost = (newPostData) => (dispatch) => {
-	dispatch({ type: "CREATE_DISCUSS_POST", payload: { newPostData } });
+export const createPost = (newPostData, history) => (dispatch) => {
+	dispatch({ type: "CREATE_DISCUSS_POST", payload: { newPostData, history } });
 };
 
 export const getDiscussPost = (postId) => (dispatch) => {

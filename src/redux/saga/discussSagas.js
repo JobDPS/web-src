@@ -13,12 +13,12 @@ function* getDiscussData () {
 
 function* createPost (action) {
 	try {
-		yield put({ type: "LOADING_DISCUSS" });
-		yield axios.post("/discuss", action.payload.newPostData);
-		yield getDiscussData();
-		yield put({ type: "DISCUSS_CLEAR_ERRORS" });
+		yield put({ type: "LOADING_UI" });
+		const res = yield axios.post("/discuss", action.payload.newPostData);
+		yield put({ type: "CLEAR_ERRORS" });
+		action.payload.history.push(`/discuss/${res.data.id}`);
 	} catch (e) {
-		yield put({ type: "DISCUSS_SET_ERROR", payload: e.response.data });
+		yield put({ type: "SET_ERRORS", payload: e.response.data });
 	}
 }
 

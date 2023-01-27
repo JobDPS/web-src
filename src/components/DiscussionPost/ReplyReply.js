@@ -306,6 +306,68 @@ class ReplyReply extends Component {
 											</Typography>
 										</Box>
 									</Link>
+									{authenticated && !this.state.replying && !this.state.editing ? (
+										<Box sx={{ ml: "8px", mt: "8px" }}>
+											{authenticated &&
+											post.info.author.stringValue === this.props.user.credentials.userId &&
+											!this.state.editing ? (
+												<Fragment>
+													<IconButton
+														aria-label='more'
+														id='long-button'
+														aria-controls={open ? "long-menu" : undefined}
+														aria-expanded={open ? "true" : undefined}
+														aria-haspopup='true'
+														onClick={this.handleClick}
+														sx={{ ml: "auto" }}
+													>
+														<MoreHorizRoundedIcon />
+													</IconButton>
+													<Menu
+														id='long-menu'
+														MenuListProps={{
+															"aria-labelledby": "long-button"
+														}}
+														anchorEl={this.state.anchorEl}
+														open={open}
+														onClose={this.handleClose}
+														TransitionComponent={Grow}
+													>
+														{options.map(
+															(option) =>
+																option === "Delete" ? (
+																	<MenuItem
+																		key={option}
+																		onClick={this.handleDeleteDialogOpen}
+																	>
+																		{option}
+																	</MenuItem>
+																) : option === "Edit" ? (
+																	<MenuItem
+																		key={option}
+																		onClick={this.handleEditPost}
+																	>
+																		{option}
+																	</MenuItem>
+																) : (
+																	<MenuItem key={option} onClick={this.handleClose}>
+																		{option}
+																	</MenuItem>
+																)
+														)}
+													</Menu>
+												</Fragment>
+											) : (
+												<span />
+											)}
+
+											<Button variant='outlined' onClick={this.handleReply}>
+												<Typography variant='body1'>Reply</Typography>
+											</Button>
+										</Box>
+									) : (
+										<span />
+									)}
 								</Box>
 
 								{this.state.editing ? (
@@ -332,66 +394,6 @@ class ReplyReply extends Component {
 													color='success'
 												/>
 											)}
-										</Button>
-									</Box>
-								) : (
-									<span />
-								)}
-
-								{authenticated && !this.state.replying && !this.state.editing ? (
-									<Box sx={{ ml: "auto", mt: "8px" }}>
-										{authenticated &&
-										post.info.author.stringValue === this.props.user.credentials.userId &&
-										!this.state.editing ? (
-											<Fragment>
-												<IconButton
-													aria-label='more'
-													id='long-button'
-													aria-controls={open ? "long-menu" : undefined}
-													aria-expanded={open ? "true" : undefined}
-													aria-haspopup='true'
-													onClick={this.handleClick}
-													sx={{ ml: "auto" }}
-												>
-													<MoreHorizRoundedIcon />
-												</IconButton>
-												<Menu
-													id='long-menu'
-													MenuListProps={{
-														"aria-labelledby": "long-button"
-													}}
-													anchorEl={this.state.anchorEl}
-													open={open}
-													onClose={this.handleClose}
-													TransitionComponent={Grow}
-												>
-													{options.map(
-														(option) =>
-															option === "Delete" ? (
-																<MenuItem
-																	key={option}
-																	onClick={this.handleDeleteDialogOpen}
-																>
-																	{option}
-																</MenuItem>
-															) : option === "Edit" ? (
-																<MenuItem key={option} onClick={this.handleEditPost}>
-																	{option}
-																</MenuItem>
-															) : (
-																<MenuItem key={option} onClick={this.handleClose}>
-																	{option}
-																</MenuItem>
-															)
-													)}
-												</Menu>
-											</Fragment>
-										) : (
-											<span />
-										)}
-
-										<Button variant='outlined' onClick={this.handleReply}>
-											<Typography variant='body1'>Reply</Typography>
 										</Button>
 									</Box>
 								) : (
