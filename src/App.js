@@ -20,6 +20,7 @@ import Discuss from "./pages/Discuss";
 import DiscussNew from "./pages/DiscussNew";
 import DiscussPage from "./pages/DiscussPage";
 import Plan from "./pages/Plan";
+import RelationNew from "./pages/RelationNew";
 
 import axios from "axios";
 
@@ -56,6 +57,7 @@ class App extends Component {
 								<Route exact path='/discuss/new' element={<AuthRoute element={DiscussNew} />} />
 								<Route exact path='/discuss/:postId' element={<UseParams element={DiscussPage} />} />
 								<Route exact path='/plan' element={<Plan />} />
+								<Route exact path='/plan/new' element={<AuthRoute element={RelationNew} />} />
 								{/* <AuthRoute exact path='/servers/:name/channels/:channel' component={server} />
 								<Route exact path='/users/:handle/post/:postId' component={post} /> */}
 								<Route path='*' to='/' />

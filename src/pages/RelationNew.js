@@ -77,7 +77,7 @@ class DiscussNew extends Component {
 		if (this.props.UI.errors) this.props.clearErrors();
 	};
 	handleCancel = () => {
-		this.props.history.push("/discuss");
+		this.props.history.push("/plan");
 	};
 
 	render () {

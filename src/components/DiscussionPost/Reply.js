@@ -167,15 +167,10 @@ class Reply extends Component {
 				<Paper
 					component='form'
 					sx={{
-						minWidth: {
-							xs: "4rem",
-							sm: "6rem",
-							md: "36rem",
-							display: "flex",
-							flexDirection: "column",
-							margin: "8px",
-							padding: "8px"
-						}
+						display: "flex",
+						flexDirection: "column",
+						margin: "8px",
+						padding: "8px"
 					}}
 					onSubmit={this.handleSubmit}
 				>

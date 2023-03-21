@@ -13,7 +13,7 @@ import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 
 import { connect } from "react-redux";
-import { getDiscussData, createPost } from "../redux/actions/discussActions";
+import { getDiscussData } from "../redux/actions/discussActions";
 import Post from "../components/DiscussionPost/Post";
 
 const styles = (theme) => ({
@@ -50,10 +50,6 @@ class Discuss extends Component {
 		this.props.getDiscussData();
 	}
 
-	handleNewPost = () => {
-		this.props.createPost({ body: "test post body 3", title: "test post title 3" });
-	};
-
 	render () {
 		const { classes, UI: { loading }, discuss: { allPosts, loading: loading2 } } = this.props;
 		const { authenticated, loading: loading3 } = this.props.user;
@@ -89,7 +85,20 @@ class Discuss extends Component {
 								<SearchIcon />
 							</IconButton>
 							<Divider sx={{ height: 28, m: 0.5 }} orientation='vertical' />
-							<Link to='/discuss/new'>
+							{authenticated ? (
+								<Link to='/discuss/new'>
+									<Button
+										color='primary'
+										sx={{ p: "10px", ml: "12px" }}
+										aria-label='create'
+										disabled={loading3 || !authenticated}
+										variant='outlined'
+									>
+										<AddIcon />
+										New Post
+									</Button>
+								</Link>
+							) : (
 								<Button
 									color='primary'
 									sx={{ p: "10px", ml: "12px" }}
@@ -100,7 +109,7 @@ class Discuss extends Component {
 									<AddIcon />
 									New Post
 								</Button>
-							</Link>
+							)}
 						</Paper>
 						<Box>{posts}</Box>
 					</Paper>
@@ -115,7 +124,6 @@ Discuss.propTypes = {
 	// loginUser: PropTypes.func.isRequired,
 	// clearErrors: PropTypes.func.isRequired,
 	getDiscussData: PropTypes.func.isRequired,
-	createPost: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired,
 	discuss: PropTypes.object.isRequired
@@ -130,8 +138,7 @@ const mapStateToProps = (state) => ({
 const mapActionsToProps = {
 	// loginUser,
 	// clearErrors
-	getDiscussData,
-	createPost
+	getDiscussData
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Discuss));

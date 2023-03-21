@@ -11,10 +11,14 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { connect } from "react-redux";
-import { getDiscussData, createPost } from "../redux/actions/discussActions";
-import Post from "../components/DiscussionPost/Post";
+import { getRelationData } from "../redux/actions/relationActions";
+import Relation from "../components/Plan/Relation";
 
 const styles = (theme) => ({
 	...theme.spread,
@@ -47,29 +51,17 @@ class Plan extends Component {
 	};
 
 	componentDidMount () {
-        if (this.props.user.authenticated)
-		    this.props.getDiscussData();
+		if (this.props.user.authenticated) this.props.getRelationData();
 	}
 
-	handleNewPost = () => {
-		// this.props.createPost({ body: "test post body 3", title: "test post title 3" });
-	};
-
 	render () {
-		const { classes, UI: { loading }, discuss: { allPosts, loading: loading2 } } = this.props;
+		const { classes, UI: { loading }, relation: { allRelations, loading: loading2 } } = this.props;
 		const { authenticated, loading: loading3 } = this.props.user;
 		const { errors } = this.state;
 		const posts =
-			allPosts && !loading2 ? (
-				allPosts.map((p, idx) => {
-					return (
-						<Post
-							key={p.info.id.stringValue}
-							post={p}
-							first={idx === 0 ? true : false}
-							last={idx === allPosts.length - 1 ? true : false}
-						/>
-					);
+			allRelations && !loading2 ? (
+				allRelations.map((p, idx) => {
+					return <Relation post={p} num={idx} key={idx} />;
 				})
 			) : (
 				<Typography>loading</Typography>
@@ -90,17 +82,31 @@ class Plan extends Component {
 								<SearchIcon />
 							</IconButton>
 							<Divider sx={{ height: 28, m: 0.5 }} orientation='vertical' />
-							<Button
-								color='primary'
-								sx={{ p: "10px", ml: "12px" }}
-								aria-label='create'
-								onClick={this.handleNewPost}
-								disabled={loading3 || !authenticated}
-								variant='outlined'
-							>
-								<AddIcon />
-								New Post
-							</Button>
+							{authenticated ? (
+								<Link to='/plan/new'>
+									<Button
+										color='primary'
+										sx={{ p: "10px", ml: "12px" }}
+										aria-label='create'
+										disabled={loading3 || !authenticated}
+										variant='outlined'
+									>
+										<AddIcon />
+										New Relation
+									</Button>
+								</Link>
+							) : (
+								<Button
+									color='primary'
+									sx={{ p: "10px", ml: "12px" }}
+									aria-label='create'
+									disabled={loading3 || !authenticated}
+									variant='outlined'
+								>
+									<AddIcon />
+									New Relation
+								</Button>
+							)}
 						</Paper>
 						<Box>{posts}</Box>
 					</Paper>
@@ -112,26 +118,22 @@ class Plan extends Component {
 
 Plan.propTypes = {
 	classes: PropTypes.object.isRequired,
-	// loginUser: PropTypes.func.isRequired,
-	// clearErrors: PropTypes.func.isRequired,
-	getDiscussData: PropTypes.func.isRequired,
-	createPost: PropTypes.func.isRequired,
+	getRelationData: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired,
-	discuss: PropTypes.object.isRequired
+	relation: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
 	user: state.user,
 	UI: state.UI,
-	discuss: state.discuss
+	relation: state.relation
 });
 
 const mapActionsToProps = {
 	// loginUser,
 	// clearErrors
-	getDiscussData,
-	createPost
+	getRelationData
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Plan));

@@ -19,6 +19,11 @@ export const LOADING_DISCUSS = 'LOADING_DISCUSS';
 export const DISCUSS_SET_ERRORS = 'DISCUSS_SET_ERROR';
 export const DISCUSS_CLEAR_ERRORS = 'DISCUSS_CLEAR_ERRORS';
 
+export const SET_RELATION = 'SET_RELATION';
+export const LOADING_RELATION = 'LOADING_RELATION';
+export const RELATION_SET_ERRORS = 'RELATION_SET_ERROR';
+export const RELATION_CLEAR_ERRORS = 'RELATION_CLEAR_ERRORS';
+
 // Data reducer types
 // export const SET_POSTS = 'SET_POSTS';
 // export const SET_POST = 'SET_POST';
