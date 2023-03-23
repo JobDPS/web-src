@@ -53,9 +53,6 @@ const styles = (theme) => ({
 	},
 	accordionSummary: {
 		cursor: "default"
-	},
-	iconButton: {
-		marginLeft: "auto"
 	}
 });
 
