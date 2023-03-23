@@ -59,7 +59,9 @@ class Plan extends Component {
 		const { authenticated, loading: loading3 } = this.props.user;
 		const { errors } = this.state;
 		const posts =
-			allRelations && !loading2 ? (
+			allRelations && !loading2 ? allRelations.length === 0 ? (
+				<Typography>No Relations</Typography>
+			) : (
 				allRelations.map((p, idx) => {
 					return <Relation post={p} num={idx} key={idx} />;
 				})

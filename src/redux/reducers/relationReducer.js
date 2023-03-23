@@ -9,6 +9,7 @@ function reducer (state = initialState, action) {
 	switch (action.type) {
 		case types.SET_RELATION:
 			return {
+				...state,
 				loading: false,
 				...action.payload
 			};

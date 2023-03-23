@@ -21,6 +21,7 @@ import DiscussNew from "./pages/DiscussNew";
 import DiscussPage from "./pages/DiscussPage";
 import Plan from "./pages/Plan";
 import RelationNew from "./pages/RelationNew";
+import RelationPage from "./pages/RelationPage";
 
 import axios from "axios";
 
@@ -50,14 +51,15 @@ class App extends Component {
 						<NavBar />
 						<div>
 							<Switch>
-								<Route exact path='/' element={<Home />} />
-								<Route exact path='/login' element={<UnAuthRoute element={Login} />} />
-								<Route exact path='/signup' element={<UnAuthRoute element={Signup} />} />
+								<Route exact path='/' element={<UnAuthRoute element={Home} redirect='/explore' />} />
+								<Route exact path='/login' element={<UnAuthRoute element={Login} redirect='/' />} />
+								<Route exact path='/signup' element={<UnAuthRoute element={Signup} redirect='/' />} />
 								<Route exact path='/discuss' element={<Discuss />} />
 								<Route exact path='/discuss/new' element={<AuthRoute element={DiscussNew} />} />
 								<Route exact path='/discuss/:postId' element={<UseParams element={DiscussPage} />} />
 								<Route exact path='/plan' element={<Plan />} />
 								<Route exact path='/plan/new' element={<AuthRoute element={RelationNew} />} />
+								<Route exact path='/plan/:relationId' element={<AuthRoute element={RelationPage} />} />
 								{/* <AuthRoute exact path='/servers/:name/channels/:channel' component={server} />
 								<Route exact path='/users/:handle/post/:postId' component={post} /> */}
 								<Route path='*' to='/' />

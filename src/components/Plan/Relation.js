@@ -32,6 +32,7 @@ import ModeCommentRoundedIcon from "@mui/icons-material/ModeCommentRounded";
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 
 import { connect } from "react-redux";
 import { clearErrors, openForm } from "../../redux/actions/userActions";
@@ -52,6 +53,9 @@ const styles = (theme) => ({
 	},
 	accordionSummary: {
 		cursor: "default"
+	},
+	iconButton: {
+		marginLeft: "auto"
 	}
 });
 
@@ -59,7 +63,7 @@ class Relation extends Component {
 	state = {
 		errors: {},
 		status: "0",
-		expanded: false,
+		expanded: this.props.disableLink,
 		editing: false,
 		newNote: ""
 	};
@@ -100,7 +104,7 @@ class Relation extends Component {
 	};
 
 	toggleAccordion = (event) => {
-		this.setState({ expanded: !this.state.expanded });
+		if (!this.props.disableLink) this.setState({ expanded: !this.state.expanded });
 	};
 
 	handleEdit = () => {
@@ -135,16 +139,21 @@ class Relation extends Component {
 			<Accordion expanded={this.state.expanded}>
 				<AccordionSummary
 					expandIcon={
-						<IconButton>
-							<ExpandMoreIcon />
-						</IconButton>
+						this.props.disableLink ? (
+							<span />
+						) : (
+							<IconButton>
+								<ExpandMoreIcon />
+							</IconButton>
+						)
 					}
 					aria-controls='panel1a-content'
 					id='panel1a-header'
 					onClick={this.toggleAccordion}
 				>
 					<Typography variant='h5'>
-						{this.props.num + 1}. {this.props.post.info.company.stringValue}
+						{this.props.disableLink ? "" : `${this.props.num + 1}. `}
+						{this.props.post.info.company.stringValue}
 					</Typography>
 					<Box sx={{ ml: "auto", display: "flex", flexDirection: "row" }}>
 						<Select
@@ -294,12 +303,31 @@ class Relation extends Component {
 								</Paper>
 							</Box>
 						</Grid>
+						{this.props.disableLink ? (
+							<span />
+						) : (
+							<Grid item xs={12} sm={12} md={12}>
+								<IconButton
+									size='small'
+									component={Link}
+									to={`/plan/${this.props.post.info.id.stringValue}`}
+									target='_blank'
+									sx={{ display: "block", float: "right", width: "40px" }}
+								>
+									<OpenInNewRoundedIcon fontSize='small' sx={{ paddingTop: "4px" }} />
+								</IconButton>
+							</Grid>
+						)}
 					</Grid>
 				</AccordionDetails>
 			</Accordion>
 		);
 	}
 }
+
+Relation.defaultProps = {
+	disableLink: false
+};
 
 Relation.propTypes = {
 	classes: PropTypes.object.isRequired,

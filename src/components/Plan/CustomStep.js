@@ -48,7 +48,7 @@ function CustomStepIcon (props) {
 		let newStage = props.index;
 		if (props.activeStep === props.index) {
 			let idx = props.index - 1;
-			while (props.dates[idx].stringValue === "") idx--;
+			while (idx >= 0 && props.dates[idx].stringValue === "") idx--;
 			newStage = idx;
 		}
 		props.editRelation(props.id, { stage: newStage });

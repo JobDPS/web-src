@@ -2,8 +2,8 @@ import { Navigate } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-const UnAuthRoute = ({ authenticated, element: Component, ...rest }) => {
-	return authenticated ? <Navigate to='/' replace /> : <Component {...rest} />;
+const UnAuthRoute = ({ authenticated, element: Component, redirect, ...rest }) => {
+	return authenticated ? <Navigate to={redirect} replace /> : <Component {...rest} />;
 };
 
 UnAuthRoute.propTypes = {
