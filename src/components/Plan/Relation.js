@@ -26,6 +26,13 @@ import MenuItem from "@mui/material/MenuItem";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ModeCommentRoundedIcon from "@mui/icons-material/ModeCommentRounded";
@@ -33,10 +40,11 @@ import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
+import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 
 import { connect } from "react-redux";
 import { clearErrors, openForm } from "../../redux/actions/userActions";
-import { editRelation } from "../../redux/actions/relationActions";
+import { editRelation, deleteRelation } from "../../redux/actions/relationActions";
 import CustomStep from "./CustomStep";
 
 const styles = (theme) => ({
@@ -62,7 +70,9 @@ class Relation extends Component {
 		status: "0",
 		expanded: this.props.disableLink,
 		editing: false,
-		newNote: ""
+		newNote: "",
+		deleteDialogOpen: false,
+		anchorEl: null
 	};
 
 	componentDidMount () {
@@ -125,12 +135,40 @@ class Relation extends Component {
 		if (this.props.UI.errors) this.props.clearErrors();
 	};
 
+	handleDeleteDialogOpen = () => {
+		this.setState({ deleteDialogOpen: true, anchorEl: null });
+	};
+	handleDeleteDialogClose = () => {
+		this.setState({ deleteDialogOpen: false });
+	};
+	handleDeleteRelation = () => {
+		this.setState({ deleteDialogOpen: false });
+		this.props.deleteRelation(this.props.post.info.id.stringValue);
+	};
+
 	render () {
 		dayjs.extend(relativeTime);
 		const { classes, UI: { loading } } = this.props;
 		const { authenticated, loading: loading3 } = this.props.user;
 		const { errors } = this.state;
 		const stages = [ "Applied", "OA", "Phone", "Final", "Offer", "Rejected" ];
+
+		const deleteDialog = (
+			<Dialog open={this.state.deleteDialogOpen} onClose={this.handleDeleteDialogClose}>
+				<DialogTitle>Delete Relation</DialogTitle>
+				<DialogContent>
+					<DialogContentText>Are you sure you want to delete this relation?</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={this.handleDeleteDialogClose} variant='outlined'>
+						Cancel
+					</Button>
+					<Button onClick={this.handleDeleteRelation} color='error' variant='outlined'>
+						Delete
+					</Button>
+				</DialogActions>
+			</Dialog>
+		);
 
 		return (
 			<Accordion expanded={this.state.expanded}>
@@ -148,9 +186,9 @@ class Relation extends Component {
 					id='panel1a-header'
 					onClick={this.toggleAccordion}
 				>
-					<Typography variant='h5'>
+					<Typography variant='h5' sx={{ textTransform: "capitalize" }}>
 						{this.props.disableLink ? "" : `${this.props.num + 1}. `}
-						{this.props.post.info.company.stringValue}
+						{this.props.post.company.name.stringValue}
 					</Typography>
 					<Box sx={{ ml: "auto", display: "flex", flexDirection: "row" }}>
 						<Select
@@ -175,7 +213,7 @@ class Relation extends Component {
 							sx={{ width: "40px", height: "40px", m: "auto 0" }}
 							onClick={this.stopBubbling}
 						/>
-						<Typography variant='body2'>
+						<Typography variant='body2' sx={{ minWidth: "8rem", textAlign: "center" }}>
 							Added {new Date(this.props.post.info.createdAt.timestampValue).toLocaleDateString()}
 						</Typography>
 					</Box>
@@ -207,9 +245,67 @@ class Relation extends Component {
 							</Box>
 						</Grid>
 						<Grid item xs={12} sm={12} md={4}>
-							<Box display='flex' justifyContent='center' alignItems='center'>
-								<Typography>Company website and socials...</Typography>
-							</Box>
+							<Card sx={{ height: "12rem" }}>
+								<CardContent>
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										{this.props.post.company.domain.stringValue !== "-1" ? (
+											<img
+												height='40px'
+												src={`https://logo.clearbit.com/${this.props.post.company.domain
+													.stringValue}`}
+												alt={`${this.props.post.company.name.stringValue} logo`}
+												onError={({ currentTarget }) => {
+													currentTarget.onerror = null;
+													currentTarget.src =
+														"https://firebasestorage.googleapis.com/v0/b/jobdps-79841.appspot.com/o/public%2Funknown-business-logo.png?alt=media";
+												}}
+												style={{ maxWidth: "8rem" }}
+											/>
+										) : (
+											<img
+												height='40px'
+												src='https://firebasestorage.googleapis.com/v0/b/jobdps-79841.appspot.com/o/public%2Funknown-business-logo.png?alt=media'
+												alt={`${this.props.post.company.name.stringValue} logo`}
+											/>
+										)}
+
+										<Box sx={{ ml: "auto" }}>
+											<a
+												href={`https://${this.props.post.company.link.stringValue}`}
+												target='_blank'
+												rel='noreferrer'
+											>
+												<IconButton sx={{ width: "32px" }}>
+													<svg
+														xmlns='http://www.w3.org/2000/svg'
+														width='24'
+														height='24'
+														viewBox='0 0 24 24'
+													>
+														<path d='M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z' />
+													</svg>
+												</IconButton>
+											</a>
+										</Box>
+									</Box>
+
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										<Typography
+											sx={{ textTransform: "capitalize", marginRight: "8px", paddingTop: "4px" }}
+										>
+											{this.props.post.company.name.stringValue}
+										</Typography>
+									</Box>
+
+									<Typography variant='body2' sx={{ textTransform: "capitalize" }}>
+										{this.props.post.company.industry.stringValue}
+									</Typography>
+
+									<Typography variant='body2' sx={{ textTransform: "capitalize" }}>
+										{this.props.post.company.size.stringValue} employees
+									</Typography>
+								</CardContent>
+							</Card>
 						</Grid>
 						<Grid item xs={12} sm={12} md={8}>
 							<Box display='flex' justifyContent='center' alignItems='center'>
@@ -300,10 +396,17 @@ class Relation extends Component {
 								</Paper>
 							</Box>
 						</Grid>
-						{this.props.disableLink ? (
-							<span />
-						) : (
-							<Grid item xs={12} sm={12} md={12}>
+						<Grid item xs={12} sm={12} md={12}>
+							<IconButton
+								size='small'
+								sx={{ height: "40px", width: "40px" }}
+								onClick={this.handleDeleteDialogOpen}
+							>
+								<DeleteOutlineRoundedIcon fontSize='small' />
+							</IconButton>
+							{this.props.disableLink ? (
+								<span />
+							) : (
 								<IconButton
 									size='small'
 									component={Link}
@@ -313,9 +416,10 @@ class Relation extends Component {
 								>
 									<OpenInNewRoundedIcon fontSize='small' sx={{ paddingTop: "4px" }} />
 								</IconButton>
-							</Grid>
-						)}
+							)}
+						</Grid>
 					</Grid>
+					{deleteDialog}
 				</AccordionDetails>
 			</Accordion>
 		);
@@ -329,6 +433,7 @@ Relation.defaultProps = {
 Relation.propTypes = {
 	classes: PropTypes.object.isRequired,
 	editRelation: PropTypes.func.isRequired,
+	deleteRelation: PropTypes.func.isRequired,
 	clearErrors: PropTypes.func.isRequired,
 	openForm: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
@@ -344,6 +449,7 @@ const mapStateToProps = (state) => ({
 
 const mapActionsToProps = {
 	editRelation,
+	deleteRelation,
 	clearErrors,
 	openForm
 };

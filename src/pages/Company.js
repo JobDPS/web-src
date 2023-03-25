@@ -175,7 +175,7 @@ class Company extends Component {
 		const { errors } = this.state;
 		const companyRows =
 			companies && !loading2 ? companies.length === 0 ? (
-				<Typography>No Companies</Typography>
+				<Typography>No companies found</Typography>
 			) : (
 				companies.map((comp) => {
 					return (

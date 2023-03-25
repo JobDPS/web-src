@@ -27,8 +27,8 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
 import CardMedia from "@mui/material/CardMedia";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -93,7 +93,7 @@ class CompanyCard extends Component {
 									currentTarget.src =
 										"https://firebasestorage.googleapis.com/v0/b/jobdps-79841.appspot.com/o/public%2Funknown-business-logo.png?alt=media";
 								}}
-								style={{ maxWidth: "10rem" }}
+								style={{ maxWidth: "8rem" }}
 							/>
 						) : (
 							<img

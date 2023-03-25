@@ -32,6 +32,7 @@ import ModeCommentRoundedIcon from "@mui/icons-material/ModeCommentRounded";
 import StarBorderRoundedIcon from "@mui/icons-material/StarBorderRounded";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 
 import { connect } from "react-redux";
 import { clearErrors, openForm } from "../redux/actions/userActions";
@@ -69,13 +70,29 @@ class RelationPage extends Component {
 		const { classes, UI: { loading }, relation: { relation, loading2 } } = this.props;
 		const { authenticated, loading: loading3 } = this.props.user;
 		const posts =
-			relation && !loading2 ? <Relation post={relation} disableLink /> : <Typography>loading</Typography>;
+			relation && !loading2 ? Object.keys(relation).length === 0 ? (
+				<Typography>No relation found</Typography>
+			) : (
+				<Relation post={relation} disableLink />
+			) : (
+				<Typography>loading</Typography>
+			);
 
 		return (
 			<Fragment>
 				<div className={classes.toolbar} />
 				<div className={classes.content}>
-					<Paper className={classes.main}>{posts}</Paper>
+					<Box className={classes.main}>
+						<Box sx={{ m: "8px" }}>
+							<Link to='/plan'>
+								<Button>
+									<ChevronLeftRoundedIcon />
+									<Typography sx={{ marginRight: "8px" }}>View All Relations</Typography>
+								</Button>
+							</Link>
+						</Box>
+						<Paper>{posts}</Paper>
+					</Box>
 				</div>
 			</Fragment>
 		);

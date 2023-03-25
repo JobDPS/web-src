@@ -17,11 +17,17 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import CircularProgress from "@mui/material/CircularProgress";
 import FormHelperText from "@mui/material/FormHelperText";
 import Button from "@mui/material/Button";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import Autocomplete from "@mui/material/Autocomplete";
 
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 
 import { connect } from "react-redux";
-import { createPost } from "../redux/actions/discussActions";
+import { searchCompanies, clearCompanies } from "../redux/actions/companyActions";
+import { createRelation } from "../redux/actions/relationActions";
 import { clearErrors } from "../redux/actions/userActions";
 import withHistory from "../util/withHistory";
 
@@ -53,22 +59,34 @@ const styles = (theme) => ({
 class DiscussNew extends Component {
 	state = {
 		errors: {},
-		postTitle: "",
-		postBody: ""
+		company: {},
+		hits: []
 	};
 
 	componentDidUpdate (prevProps, prevState) {
 		if (this.props.UI.errors && JSON.stringify(this.props.UI.errors) !== JSON.stringify(this.state.errors))
 			this.setState({ errors: this.props.UI.errors });
+		if (
+			Object.keys(this.props.company).includes("companies") &&
+			!(
+				this.props.company.companies.length === this.state.hits.length &&
+				this.props.company.companies.every(
+					(comp, idx) => JSON.stringify(comp) === JSON.stringify(this.state.hits[idx])
+				)
+			)
+		) {
+			this.setState({ hits: this.props.company.companies });
+		}
 	}
 
 	handleSubmit = (event) => {
 		event.preventDefault();
-		const newPostData = {
-			title: this.state.postTitle,
-			body: this.state.postBody
-		};
-		this.props.createPost(newPostData, this.props.history);
+		if (Object.keys(this.state.company).length > 0) {
+			const newRelationData = {
+				id: this.state.company.id.stringValue
+			};
+			this.props.createRelation(newRelationData, this.props.history);
+		}
 	};
 	handleChange = (event) => {
 		this.setState({
@@ -80,8 +98,16 @@ class DiscussNew extends Component {
 		this.props.history.push("/plan");
 	};
 
+	handleChoiceChange = (e) => {
+		if (e.target.value && e.target.value !== "") this.props.searchCompanies({ query: e.target.value });
+		else this.props.clearCompanies();
+	};
+	handleSubmitChoice = (e, v) => {
+		this.setState({ company: v });
+	};
+
 	render () {
-		const { classes, UI: { loading }, discuss: { allPosts, loading: loading2 } } = this.props;
+		const { classes, UI: { loading } } = this.props;
 		const { authenticated, loading: loading3 } = this.props.user;
 		const { errors } = this.state;
 
@@ -97,40 +123,56 @@ class DiscussNew extends Component {
 					>
 						<Paper className={classes.form} sx={{ padding: { xs: "1rem", sm: "2rem", md: "5rem" } }}>
 							<Typography variant='h6' sx={{ mx: "auto", mb: 2 }}>
-								Create post
+								Create relation
 							</Typography>
 							<Box sx={{ mb: 2 }}>
-								<Typography variant='body1'>Post title</Typography>
-								<TextField
-									placeholder='Write your title here...'
-									name='postTitle'
-									id='postTitle'
-									error={errors.postTitle || errors.error ? true : false}
-									value={this.state.postTitle}
-									onChange={this.handleChange}
-									fullWidth
-									variant='outlined'
+								<Typography variant='body1'>Company</Typography>
+								<Autocomplete
+									disablePortal
+									id='company'
+									options={this.state.hits}
+									sx={{ width: "100%" }}
+									renderInput={(params) => <TextField {...params} />}
+									onInputChange={this.handleChoiceChange}
+									onChange={this.handleSubmitChoice}
+									getOptionLabel={(option) =>
+										option.name.stringValue.replace(/(\b\w)/g, function (m, p1) {
+											return p1.toUpperCase();
+										})}
+									loading={this.props.company.loading}
+									isOptionEqualToValue={(option, value) =>
+										option.name.stringValue === value.name.stringValue}
+									renderOption={(props, option, { selected }) => (
+										<Box {...props} sx={{ display: "flex", flexDirection: "row" }}>
+											<Box sx={{ minWidth: "8rem", marginRight: "8px" }}>
+												{option.domain.stringValue !== "-1" ? (
+													<img
+														height='40px'
+														src={`https://logo.clearbit.com/${option.domain.stringValue}`}
+														alt={`${option.name.stringValue} logo`}
+														onError={({ currentTarget }) => {
+															currentTarget.onerror = null;
+															currentTarget.src =
+																"https://firebasestorage.googleapis.com/v0/b/jobdps-79841.appspot.com/o/public%2Funknown-business-logo.png?alt=media";
+														}}
+														style={{ maxWidth: "8rem" }}
+													/>
+												) : (
+													<img
+														height='40px'
+														src='https://firebasestorage.googleapis.com/v0/b/jobdps-79841.appspot.com/o/public%2Funknown-business-logo.png?alt=media'
+														alt={`${option.name.stringValue} logo`}
+													/>
+												)}
+											</Box>
+											<Typography sx={{ textTransform: "capitalize" }}>
+												{option.name.stringValue}
+											</Typography>
+										</Box>
+									)}
 								/>
-								<FormHelperText error={errors.postTitle ? true : false}>
-									{errors.postTitle}
-								</FormHelperText>
-							</Box>
-							<Box sx={{ mb: 2 }}>
-								<Typography variant='body1'>Post body</Typography>
-								<TextField
-									placeholder='Write your body here...'
-									name='postBody'
-									id='postBody'
-									multiline
-									rows={2}
-									error={errors.postBody || errors.error ? true : false}
-									value={this.state.postBody}
-									onChange={this.handleChange}
-									fullWidth
-									variant='outlined'
-								/>
-								<FormHelperText error={errors.postBody || errors.error ? true : false}>
-									{errors.postBody} {errors.error}
+								<FormHelperText error={errors.relationCompany ? true : false}>
+									{errors.relationCompany}
 								</FormHelperText>
 							</Box>
 							<Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -145,7 +187,7 @@ class DiscussNew extends Component {
 								</Button>
 								<Button type='submit' variant='outlined' size='large' sx={{ mb: 1 }} disabled={loading}>
 									<Typography variant='body1' sx={{ mr: "8px" }}>
-										Post
+										Save
 									</Typography>
 									<SendRoundedIcon />
 									{loading && <CircularProgress size={30} className={classes.progress} />}
@@ -162,22 +204,26 @@ class DiscussNew extends Component {
 DiscussNew.propTypes = {
 	classes: PropTypes.object.isRequired,
 	clearErrors: PropTypes.func.isRequired,
-	createPost: PropTypes.func.isRequired,
+	createRelation: PropTypes.func.isRequired,
+	searchCompanies: PropTypes.func.isRequired,
+	clearCompanies: PropTypes.func.isRequired,
 	history: PropTypes.object.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired,
-	discuss: PropTypes.object.isRequired
+	company: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
 	user: state.user,
 	UI: state.UI,
-	discuss: state.discuss
+	company: state.company
 });
 
 const mapActionsToProps = {
 	clearErrors,
-	createPost
+	searchCompanies,
+	createRelation,
+	clearCompanies
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(withHistory(DiscussNew)));

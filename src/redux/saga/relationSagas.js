@@ -53,11 +53,36 @@ function* editRelationDate (action) {
 	}
 }
 
+function* createRelation (action) {
+	try {
+		yield put({ type: "LOADING_UI" });
+		const res = yield axios.post(`/relation`, action.payload.newRelationData);
+		yield put({ type: "CLEAR_ERRORS" });
+		action.payload.history.push(`/plan/${res.data.id}`);
+	} catch (e) {
+		console.log(e);
+		yield put({ type: "SET_ERROR", payload: e.response.data });
+	}
+}
+
+function* deleteRelation (action) {
+	try {
+		yield put({ type: "LOADING_RELATION" });
+		yield axios.delete(`/relation/${action.payload.relationId}`);
+		const res = yield axios.get("/relation");
+		yield put({ type: "SET_RELATION", payload: { ...res.data, relation: {} } });
+	} catch (e) {
+		yield put({ type: "RELATION_SET_ERROR", payload: e });
+	}
+}
+
 function* relationSaga () {
 	yield takeLatest("GET_RELATION_DATA", getRelationData);
 	yield takeLatest("GET_RELATION", getRelation);
 	yield takeLatest("EDIT_RELATION", editRelation);
 	yield takeLatest("EDIT_RELATION_DATE", editRelationDate);
+	yield takeLatest("CREATE_RELATION", createRelation);
+	yield takeLatest("DELETE_RELATION", deleteRelation);
 }
 
 export default relationSaga;

@@ -9,3 +9,7 @@ export const editUserStarredCompanies = (id, pageData) => (dispatch) => {
 export const searchCompanies = (query) => (dispatch) => {
 	dispatch({ type: "SEARCH_COMPANY", payload: { query } });
 };
+
+export const clearCompanies = () => (dispatch) => {
+	dispatch({ type: "CLEAR_COMPANY"});
+};

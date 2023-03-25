@@ -31,10 +31,15 @@ function* searchCompanies (action) {
 	}
 }
 
+function* clearCompanies (action) {
+	yield put({ type: "SET_COMPANIES", payload: { companies: [] } });
+}
+
 function* relationSaga () {
 	yield takeLatest("GET_COMPANY_DATA", getCompanyData);
 	yield takeLatest("EDIT_USER_COMPANY_STARRED", editUserStarredCompanies);
 	yield takeLatest("SEARCH_COMPANY", searchCompanies);
+	yield takeLatest("CLEAR_COMPANY", clearCompanies);
 }
 
 export default relationSaga;

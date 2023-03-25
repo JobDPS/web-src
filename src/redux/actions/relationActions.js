@@ -13,3 +13,11 @@ export const editRelation = (relationId, newPostData) => (dispatch) => {
 export const editRelationDate = (relationId, newPostData) => (dispatch) => {
 	dispatch({ type: "EDIT_RELATION_DATE", payload: { relationId, newPostData } });
 };
+
+export const createRelation = (newRelationData, history) => (dispatch) => {
+	dispatch({ type: "CREATE_RELATION", payload: { newRelationData, history } });
+};
+
+export const deleteRelation = (relationId, history) => (dispatch) => {
+	dispatch({ type: "DELETE_RELATION", payload: { relationId, history } });
+};
