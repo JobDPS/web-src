@@ -39,8 +39,7 @@ import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 
 import { connect } from "react-redux";
-import { clearErrors, openForm } from "../../redux/actions/userActions";
-import { editRelation } from "../../redux/actions/relationActions";
+import { editUserStarredCompanies } from "../../redux/actions/companyActions";
 
 const styles = (theme) => ({
 	...theme.spread,
@@ -56,18 +55,19 @@ const styles = (theme) => ({
 	}
 });
 
-class CompanyRow extends Component {
+class CompanyCard extends Component {
 	state = {
 		errors: {}
 	};
 
-	componentDidMount () {}
-
 	handleStar = (event) => {
-		const newRelationData = {
-			starred: event.target.checked ? 1 : 0
-		};
-		this.props.editRelation(this.props.post.info.id.stringValue, newRelationData);
+		this.props.editUserStarredCompanies(
+			{ id: this.props.company.id.stringValue },
+			{
+				page: this.props.page,
+				pageSize: this.props.pageSize
+			}
+		);
 	};
 
 	stopBubbling = (event) => {
@@ -82,21 +82,51 @@ class CompanyRow extends Component {
 		return (
 			<Card sx={{ width: "16rem", height: "16rem", margin: "8px" }}>
 				<CardContent>
-					<img
-						height='40px'
-						src={`https://logo.clearbit.com/${this.props.company.info.domain.stringValue}`}
-						alt={`${this.props.company.info.name.stringValue} logo`}
-					/>
+					<Box sx={{ display: "flex", flexDirection: "row" }}>
+						{this.props.company.domain.stringValue !== "-1" ? (
+							<img
+								height='40px'
+								src={`https://logo.clearbit.com/${this.props.company.domain.stringValue}`}
+								alt={`${this.props.company.name.stringValue} logo`}
+								onError={({ currentTarget }) => {
+									currentTarget.onerror = null;
+									currentTarget.src =
+										"https://firebasestorage.googleapis.com/v0/b/jobdps-79841.appspot.com/o/public%2Funknown-business-logo.png?alt=media";
+								}}
+								style={{ maxWidth: "10rem" }}
+							/>
+						) : (
+							<img
+								height='40px'
+								src='https://firebasestorage.googleapis.com/v0/b/jobdps-79841.appspot.com/o/public%2Funknown-business-logo.png?alt=media'
+								alt={`${this.props.company.name.stringValue} logo`}
+							/>
+						)}
+
+						{authenticated && !loading3 ? (
+							<Checkbox
+								icon={<StarBorderRoundedIcon />}
+								checkedIcon={<StarRoundedIcon />}
+								checked={
+									Object.keys(this.props.user.credentials.starredCompanies.arrayValue).length !== 0 &&
+									this.props.user.credentials.starredCompanies.arrayValue.values
+										.map((id) => id.stringValue)
+										.includes(this.props.company.id.stringValue)
+								}
+								inputProps={{ "aria-label": "star company" }}
+								onChange={this.handleStar}
+								sx={{ width: "40px", height: "40px", m: "auto 0", ml: "auto" }}
+							/>
+						) : (
+							<span />
+						)}
+					</Box>
 
 					<Box sx={{ display: "flex", flexDirection: "row" }}>
 						<Typography sx={{ textTransform: "capitalize", marginRight: "8px", paddingTop: "4px" }}>
-							{this.props.company.info.name.stringValue}
+							{this.props.company.name.stringValue}
 						</Typography>
-						<a
-							href={`https://${this.props.company.info.link.stringValue}`}
-							target='_blank'
-							rel='noreferrer'
-						>
+						<a href={`https://${this.props.company.link.stringValue}`} target='_blank' rel='noreferrer'>
 							<IconButton sx={{ width: "32px" }}>
 								<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'>
 									<path d='M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z' />
@@ -106,19 +136,19 @@ class CompanyRow extends Component {
 					</Box>
 
 					<Typography variant='body2' sx={{ textTransform: "capitalize" }}>
-						{this.props.company.info.industry.stringValue}
+						{this.props.company.industry.stringValue}
 					</Typography>
 
 					{/* <Typography variant='body2' sx={{ textTransform: "capitalize" }}>
-						{this.props.company.info.founded.integerValue !== "-1" ? (
-							`Founded ${this.props.company.info.founded.integerValue}`
+						{this.props.company.founded.integerValue !== "-1" ? (
+							`Founded ${this.props.company.founded.integerValue}`
 						) : (
 							""
 						)}
 					</Typography> */}
 
 					<Typography variant='body2' sx={{ textTransform: "capitalize" }}>
-						{this.props.company.info.size.stringValue} employees
+						{this.props.company.size.stringValue} employees
 					</Typography>
 				</CardContent>
 				{/* <CardActions>
@@ -129,11 +159,9 @@ class CompanyRow extends Component {
 	}
 }
 
-CompanyRow.propTypes = {
+CompanyCard.propTypes = {
 	classes: PropTypes.object.isRequired,
-	editRelation: PropTypes.func.isRequired,
-	clearErrors: PropTypes.func.isRequired,
-	openForm: PropTypes.func.isRequired,
+	editUserStarredCompanies: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired,
 	relation: PropTypes.object.isRequired
@@ -146,9 +174,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapActionsToProps = {
-	editRelation,
-	clearErrors,
-	openForm
+	editUserStarredCompanies
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(CompanyRow));
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(CompanyCard));
