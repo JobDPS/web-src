@@ -14,8 +14,6 @@ function* getCompanyData (action) {
 function* editUserStarredCompanies (action) {
 	try {
 		yield axios.post("/company/star", action.payload.id);
-		const res = yield axios.post("/company", action.payload.pageData);
-		yield put({ type: "SET_COMPANIES", payload: res.data });
 		const res2 = yield axios.get("/user");
 		yield put({ type: "SET_USER", payload: res2.data.userData });
 	} catch (e) {

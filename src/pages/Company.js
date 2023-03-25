@@ -81,7 +81,7 @@ function ListControls (props) {
 	return (
 		<Box sx={{ display: "flex", p: "8px" }}>
 			<Typography sx={{ paddingTop: "8px", marginRight: "auto", flex: 1 }}>
-				{page * rowsPerPage + 1}–{(page + 1) * rowsPerPage} of {count}
+				{page * rowsPerPage + 1}–{Math.min((page + 1) * rowsPerPage, count)} of {count}
 			</Typography>
 
 			<IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} aria-label='first page'>
@@ -108,7 +108,7 @@ function ListControls (props) {
 			<Box
 				sx={{ marginLeft: "auto", display: "flex", flexDirection: "row", flex: 1, justifyContent: "flex-end" }}
 			>
-				<Typography sx={{ paddingTop: "8px", marginRight: "8px" }}>Rows per page:</Typography>
+				<Typography sx={{ paddingTop: "8px", marginRight: "8px" }}>Companies per page:</Typography>
 				<FormControl size='small' variant='standard' sx={{ paddingTop: "8px", marginRight: "8px" }}>
 					<Select
 						labelId='rowsPerPage'
@@ -255,7 +255,7 @@ class Company extends Component {
 								rowsPerPageOptions={[ 10, 25, 100 ]}
 								onPageChange={this.handleChangePage}
 								onRowsPerPageChange={this.handleChangeRowsPerPage}
-								count={500}
+								count={498}
 							/>
 						</Paper>
 						<Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>{companyRows}</Box>

@@ -138,7 +138,14 @@ function Footer (props) {
 					<Typography />
 				</Grid>
 				<Grid item xs={12} sm={12} md={4}>
-					<Paper>xs=4</Paper>
+					<Box display='flex' justifyContent='center' alignItems='center'>
+						<Typography variant='caption'>
+							Company logos provided by{" "}
+							<a href='https://clearbit.com' style={{ textDecoration: "underline" }}>
+								Clearbit
+							</a>
+						</Typography>
+					</Box>
 				</Grid>
 				<Grid item xs={12} sm={12} md={8}>
 					<Paper>xs=8</Paper>
