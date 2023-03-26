@@ -36,9 +36,9 @@ import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 
 import { connect } from "react-redux";
-import { getDiscussPost, createReply, deleteDiscussPost, editDiscussPost } from "../redux/actions/discussActions";
+import { getSocialPost, createReply, deleteSocialPost, editSocialPost } from "../redux/actions/socialActions";
 import { clearErrors, openForm } from "../redux/actions/userActions";
-import Reply from "../components/DiscussionPost/Reply";
+import Reply from "../components/SocialPost/Reply";
 
 const styles = (theme) => ({
 	...theme.spread,
@@ -65,7 +65,7 @@ const styles = (theme) => ({
 	}
 });
 
-class DiscussPage extends Component {
+class SocialPage extends Component {
 	state = {
 		vote: "none",
 		replyBody: "",
@@ -79,7 +79,7 @@ class DiscussPage extends Component {
 
 	componentDidMount () {
 		if (this.props.UI.errors) this.props.clearErrors();
-		this.props.getDiscussPost(this.props.match.params.postId);
+		this.props.getSocialPost(this.props.match.params.postId);
 	}
 
 	componentDidUpdate (prevProps, prevState) {
@@ -91,10 +91,10 @@ class DiscussPage extends Component {
 			this.props.openForm();
 		}
 		if (
-			prevProps.discuss.post &&
-			prevProps.discuss.post.replies &&
-			this.props.discuss.post.replies &&
-			prevProps.discuss.post.replies.length !== this.props.discuss.post.replies.length
+			prevProps.social.post &&
+			prevProps.social.post.replies &&
+			this.props.social.post.replies &&
+			prevProps.social.post.replies.length !== this.props.social.post.replies.length
 		)
 			this.setState({ replyBody: "" });
 	}
@@ -133,24 +133,22 @@ class DiscussPage extends Component {
 	};
 	handleDeletePost = () => {
 		this.setState({ deleteDialogOpen: false });
-		this.props.deleteDiscussPost(this.props.match.params.postId);
+		this.props.deleteSocialPost(this.props.match.params.postId);
 	};
 
 	handleEditPost = () => {
 		this.setState({
 			editing: true,
 			anchorEl: null,
-			postBody: this.props.discuss.post.info.body.stringValue,
-			postTitle: this.props.discuss.post.info.title.stringValue
+			postBody: this.props.social.post.info.body.stringValue
 		});
 		this.props.openForm();
 	};
 	handleEditSubmit = () => {
 		const newPostData = {
-			title: this.state.postTitle,
 			body: this.state.postBody
 		};
-		this.props.editDiscussPost(this.props.match.params.postId, newPostData);
+		this.props.editSocialPost(this.props.match.params.postId, newPostData);
 	};
 	handleEditCancel = () => {
 		this.setState({ editing: false });
@@ -159,14 +157,14 @@ class DiscussPage extends Component {
 
 	render () {
 		dayjs.extend(relativeTime);
-		const { classes, UI: { loading }, discuss: { post, loading: loading2 } } = this.props;
+		const { classes, UI: { loading }, social: { post, loading: loading2 } } = this.props;
 		const { authenticated, loading: loading3 } = this.props.user;
 		const { errors } = this.state;
 		const options = [ "Edit", "Delete" ];
 		const open = Boolean(this.state.anchorEl);
 
-		if (this.props.discuss.errors) {
-			const error = this.props.discuss.errors.error;
+		if (this.props.social.errors) {
+			const error = this.props.social.errors.error;
 			return (
 				<Fragment>
 					<div className={classes.toolbar} />
@@ -236,30 +234,8 @@ class DiscussPage extends Component {
 						</ToggleButtonGroup> */}
 						<Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
 							<Box sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
-								{this.state.editing ? (
-									<Box sx={{ width: "100%", p: "8px" }}>
-										<TextField
-											name='postTitle'
-											id='postTitle'
-											error={errors.postTitle || errors.error ? true : false}
-											value={this.state.postTitle}
-											onChange={this.handleChange}
-											fullWidth
-											variant='outlined'
-											placeholder='Write your title here...'
-											disabled={loading || loading2}
-											label='Title'
-											sx={{ ".MuiInputBase-input": { fontSize: "2.125rem" } }}
-										/>
-										<FormHelperText error={errors.postTitle || errors.error ? true : false}>
-											{errors.postTitle} {errors.error}
-										</FormHelperText>
-									</Box>
-								) : (
-									<Typography variant='h4'>{post.info.title.stringValue}</Typography>
-								)}
-
 								{authenticated &&
+								!loading3 &&
 								post.info.author.stringValue === this.props.user.credentials.userId &&
 								!this.state.editing ? (
 									<Fragment>
@@ -477,32 +453,32 @@ class DiscussPage extends Component {
 	}
 }
 
-DiscussPage.propTypes = {
+SocialPage.propTypes = {
 	classes: PropTypes.object.isRequired,
 	clearErrors: PropTypes.func.isRequired,
-	getDiscussPost: PropTypes.func.isRequired,
-	deleteDiscussPost: PropTypes.func.isRequired,
+	getSocialPost: PropTypes.func.isRequired,
+	deleteSocialPost: PropTypes.func.isRequired,
 	createReply: PropTypes.func.isRequired,
-	editDiscussPost: PropTypes.func.isRequired,
+	editSocialPost: PropTypes.func.isRequired,
 	openForm: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired,
-	discuss: PropTypes.object.isRequired
+	social: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
 	user: state.user,
 	UI: state.UI,
-	discuss: state.discuss
+	social: state.social
 });
 
 const mapActionsToProps = {
 	clearErrors,
-	getDiscussPost,
-	deleteDiscussPost,
+	getSocialPost,
+	deleteSocialPost,
 	createReply,
-	editDiscussPost,
+	editSocialPost,
 	openForm
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(DiscussPage));
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(SocialPage));

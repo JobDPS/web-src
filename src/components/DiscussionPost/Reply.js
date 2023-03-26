@@ -262,7 +262,7 @@ class Reply extends Component {
 											{dayjs(this.props.reply.info.createdAt.timestampValue).fromNow()}
 										</Typography>
 									</Link>
-									<ToggleButtonGroup
+									{/* <ToggleButtonGroup
 										orientation='horizontal'
 										value={this.state.vote}
 										exclusive
@@ -280,7 +280,7 @@ class Reply extends Component {
 										<ToggleButton value='down' aria-label='down vote' sx={{ border: "0" }}>
 											<KeyboardArrowDownRoundedIcon />
 										</ToggleButton>
-									</ToggleButtonGroup>
+									</ToggleButtonGroup> */}
 								</Box>
 								<Box sx={{ display: "flex", flexDirection: "row" }}>
 									{this.state.editing ? (
@@ -300,7 +300,6 @@ class Reply extends Component {
 												fullWidth
 												variant='outlined'
 												placeholder='Write your body here...'
-												defaultValue={this.state.postBody}
 												disabled={loading || loading2}
 												label='Reply Body'
 											/>
@@ -356,7 +355,7 @@ class Reply extends Component {
 								{authenticated && !this.state.replying && !this.state.editing ? (
 									<Box sx={{ ml: "auto", mt: "8px" }}>
 										{authenticated &&
-										post.info.author.stringValue === this.props.user.credentials.userId &&
+										this.props.reply.info.author.stringValue === this.props.user.credentials.userId &&
 										!this.state.editing ? (
 											<Fragment>
 												<IconButton
@@ -416,8 +415,8 @@ class Reply extends Component {
 							</Box>
 						</Box>
 						{form}
-						{deleteDialog}
 						{replies}
+						{deleteDialog}
 					</Paper>
 				</div>
 			</Fragment>

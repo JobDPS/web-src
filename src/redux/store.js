@@ -7,11 +7,13 @@ import uiReducer from "./reducers/uiReducer";
 import discussReducer from "./reducers/discussReducer";
 import relationReducer from "./reducers/relationReducer";
 import companyReducer from "./reducers/companyReducer";
+import socialReducer from "./reducers/socialReducer";
 
 import userSaga from "./saga/userSagas";
 import discussSaga from "./saga/discussSagas";
 import relationSaga from "./saga/relationSagas";
 import companySaga from "./saga/companySagas";
+import socialSaga from "./saga/socialSagas";
 
 const initialState = {};
 
@@ -23,7 +25,8 @@ const reducers = combineReducers({
 	UI: uiReducer,
 	discuss: discussReducer,
 	relation: relationReducer,
-	company: companyReducer
+	company: companyReducer,
+	social: socialReducer
 });
 
 const composeEnhancers =
@@ -38,5 +41,6 @@ sagaMiddleware.run(userSaga);
 sagaMiddleware.run(discussSaga);
 sagaMiddleware.run(relationSaga);
 sagaMiddleware.run(companySaga);
+sagaMiddleware.run(socialSaga);
 
 export default store;

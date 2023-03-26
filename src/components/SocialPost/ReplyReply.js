@@ -35,9 +35,9 @@ import ReplyRoundedIcon from "@mui/icons-material/ReplyRounded";
 import { connect } from "react-redux";
 import {
 	createReplyReply2,
-	deleteDiscussPostReplyReply,
-	editDiscussPostReplyReply
-} from "../../redux/actions/discussActions";
+	deleteSocialPostReplyReply,
+	editSocialPostReplyReply
+} from "../../redux/actions/socialActions";
 import { clearErrors, openForm } from "../../redux/actions/userActions";
 
 const styles = (theme) => ({
@@ -121,7 +121,7 @@ class ReplyReply extends Component {
 	};
 	handleDeletePostReply = () => {
 		this.setState({ deleteDialogOpen: false });
-		this.props.deleteDiscussPostReplyReply(
+		this.props.deleteSocialPostReplyReply(
 			this.props.postId,
 			this.props.replyId,
 			this.props.reply.info.id.stringValue
@@ -140,7 +140,7 @@ class ReplyReply extends Component {
 		const newReplyData = {
 			body: this.state.replyBodyNew
 		};
-		this.props.editDiscussPostReplyReply(
+		this.props.editSocialPostReplyReply(
 			this.props.postId,
 			this.props.replyId,
 			this.props.reply.info.id.stringValue,
@@ -154,7 +154,7 @@ class ReplyReply extends Component {
 
 	render () {
 		dayjs.extend(relativeTime);
-		const { classes, UI: { loading }, discuss: { post, loading: loading2 } } = this.props;
+		const { classes, UI: { loading }, social: { post, loading: loading2 } } = this.props;
 		const { authenticated, loading: loading3 } = this.props.user;
 		const { errors } = this.state;
 		const options = [ "Edit", "Delete" ];
@@ -413,25 +413,25 @@ ReplyReply.propTypes = {
 	classes: PropTypes.object.isRequired,
 	clearErrors: PropTypes.func.isRequired,
 	openForm: PropTypes.func.isRequired,
-	deleteDiscussPostReplyReply: PropTypes.func.isRequired,
-	editDiscussPostReplyReply: PropTypes.func.isRequired,
+	deleteSocialPostReplyReply: PropTypes.func.isRequired,
+	editSocialPostReplyReply: PropTypes.func.isRequired,
 	createReplyReply2: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired,
-	discuss: PropTypes.object.isRequired
+	social: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
 	user: state.user,
 	UI: state.UI,
-	discuss: state.discuss
+	social: state.social
 });
 
 const mapActionsToProps = {
 	clearErrors,
 	openForm,
-	deleteDiscussPostReplyReply,
-	editDiscussPostReplyReply,
+	deleteSocialPostReplyReply,
+	editSocialPostReplyReply,
 	createReplyReply2
 };
 

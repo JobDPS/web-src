@@ -29,6 +29,11 @@ export const LOADING_COMPANIES = 'LOADING_COMPANIES';
 export const COMPANIES_SET_ERRORS = 'COMPANIES_SET_ERROR';
 export const COMPANIES_CLEAR_ERRORS = 'COMPANIES_CLEAR_ERRORS';
 
+export const SET_SOCIAL = 'SET_SOCIAL';
+export const LOADING_SOCIAL = 'LOADING_SOCIAL';
+export const SOCIAL_SET_ERRORS = 'SOCIAL_SET_ERROR';
+export const SOCIAL_CLEAR_ERRORS = 'SOCIAL_CLEAR_ERRORS';
+
 // Data reducer types
 // export const SET_POSTS = 'SET_POSTS';
 // export const SET_POST = 'SET_POST';

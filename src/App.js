@@ -23,6 +23,8 @@ import Plan from "./pages/Plan";
 import RelationNew from "./pages/RelationNew";
 import RelationPage from "./pages/RelationPage";
 import Company from "./pages/Company";
+import Social from "./pages/Social";
+import SocialPage from "./pages/SocialPage";
 
 import axios from "axios";
 
@@ -62,8 +64,10 @@ class App extends Component {
 								<Route exact path='/plan/new' element={<AuthRoute element={RelationNew} />} />
 								<Route exact path='/plan/:relationId' element={<AuthRoute element={RelationPage} />} />
 								<Route exact path='/companies' element={<Company />} />
-								{/* <AuthRoute exact path='/servers/:name/channels/:channel' component={server} />
-								<Route exact path='/users/:handle/post/:postId' component={post} /> */}
+
+								<Route exact path='/social' element={<AuthRoute element={Social} />} />
+								<Route exact path='/social/:postId' element={<UseParams element={SocialPage} />} />
+
 								<Route path='*' to='/' />
 							</Switch>
 						</div>
