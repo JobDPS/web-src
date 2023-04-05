@@ -108,6 +108,12 @@ function NavBar (props) {
 							<MenuItem key={setting} onClick={handleLogout}>
 								<Typography textAlign='center'>{setting}</Typography>
 							</MenuItem>
+						) : setting === "Profile" ? (
+							<MenuItem key={setting} onClick={handleCloseUserMenu}>
+								<Link to={`/users/${props.user.credentials.userId}`}>
+									<Typography textAlign='center'>{setting}</Typography>
+								</Link>
+							</MenuItem>
 						) : (
 							<MenuItem key={setting} onClick={handleCloseUserMenu}>
 								<Typography textAlign='center'>{setting}</Typography>
@@ -132,7 +138,7 @@ function NavBar (props) {
 	);
 
 	return (
-		<div className={classes.root}>
+		<div className={classes.root} id='back-to-top-anchor'>
 			<AppBar>
 				<Container maxWidth='xl'>
 					<Toolbar disableGutters>

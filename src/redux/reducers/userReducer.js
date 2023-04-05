@@ -62,11 +62,11 @@ function reducer (state = initialState, action) {
 		// 		...state,
 		// 		likes: state.likes.filter((like) => like.commentId !== action.payload.commentId)
 		// 	};
-		case types.SET_PROFILE:
-			return {
-				...state,
-				loading: false
-			};
+		// case types.SET_PROFILE:
+		// 	return {
+		// 		...state,
+		// 		loading: false
+		// 	};
 		default:
 			return state;
 	}

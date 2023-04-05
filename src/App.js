@@ -25,6 +25,7 @@ import RelationPage from "./pages/RelationPage";
 import Company from "./pages/Company";
 import Social from "./pages/Social";
 import SocialPage from "./pages/SocialPage";
+import Profile from "./pages/Profile";
 
 import axios from "axios";
 
@@ -34,7 +35,7 @@ const theme = createTheme(themeObject);
 
 const token = localStorage.RefreshToken;
 if (token) {
-	store.dispatch({ type: "SET_AUTHENTICATED" });
+	// store.dispatch({ type: "SET_AUTHENTICATED" });
 	axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 	store.dispatch({ type: "GET_USER_DATA" });
 
@@ -67,6 +68,8 @@ class App extends Component {
 
 								<Route exact path='/social' element={<AuthRoute element={Social} />} />
 								<Route exact path='/social/:postId' element={<UseParams element={SocialPage} />} />
+
+								<Route exact path='/users/:userId' element={<UseParams element={Profile} />} />
 
 								<Route path='*' to='/' />
 							</Switch>

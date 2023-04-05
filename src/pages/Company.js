@@ -222,7 +222,7 @@ class Company extends Component {
 
 		return (
 			<Fragment>
-				<div className={classes.toolbar} id='back-to-top-anchor' />
+				<div className={classes.toolbar} />
 				<div className={classes.content}>
 					<Box className={classes.main}>
 						<Paper>
