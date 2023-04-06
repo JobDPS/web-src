@@ -52,6 +52,10 @@ const styles = (theme) => ({
 
 function Footer (props) {
 	const classes = props.classes;
+	const handleClick = (event) => {
+		const anchor = (event.target.ownerDocument || document).querySelector("#back-to-top-anchor");
+		if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+	};
 	return (
 		<Paper square elevation={4} className={classes.root} sx={{ backgroundColor: "#f3f4f6" }}>
 			<Grid container spacing={{ xs: 1, sm: 1, md: 2 }}>
@@ -91,6 +95,7 @@ function Footer (props) {
 										color: "inherit",
 										textDecoration: "none"
 									}}
+									onClick={handleClick}
 								>
 									About Us
 								</Typography>
@@ -104,6 +109,7 @@ function Footer (props) {
 										color: "inherit",
 										textDecoration: "none"
 									}}
+									onClick={handleClick}
 								>
 									Contact
 								</Typography>
@@ -117,6 +123,7 @@ function Footer (props) {
 										color: "inherit",
 										textDecoration: "none"
 									}}
+									onClick={handleClick}
 								>
 									Help Center
 								</Typography>
@@ -130,7 +137,7 @@ function Footer (props) {
 				<Grid item xs={12} sm={12} md={4}>
 					<Box display='flex' justifyContent='center' alignItems='center'>
 						<Typography variant='caption'>
-							Copyright <span style={{ fontFamily: "Roboto" }}>©</span> 2022 JobDPS
+							Copyright <span style={{ fontFamily: "Roboto" }}>©</span> 2022-2023 JobDPS
 						</Typography>
 					</Box>
 				</Grid>
@@ -148,7 +155,7 @@ function Footer (props) {
 					</Box>
 				</Grid>
 				<Grid item xs={12} sm={12} md={8}>
-					<Paper>xs=8</Paper>
+					{/* <Paper>xs=8</Paper> */}
 				</Grid>
 			</Grid>
 		</Paper>

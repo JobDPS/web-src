@@ -76,6 +76,11 @@ function NavBar (props) {
 		props.logoutUser();
 	};
 
+	const handleClick = (event) => {
+		const anchor = (event.target.ownerDocument || document).querySelector("#back-to-top-anchor");
+		if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+	};
+
 	const user = authenticated ? (
 		<div>
 			<Tooltip title='Open settings'>
@@ -110,7 +115,7 @@ function NavBar (props) {
 							</MenuItem>
 						) : setting === "Profile" ? (
 							<MenuItem key={setting} onClick={handleCloseUserMenu}>
-								<Link to={`/users/${props.user.credentials.userId}`}>
+								<Link to={`/users/${props.user.credentials.userId}`} onClick={handleClick}>
 									<Typography textAlign='center'>{setting}</Typography>
 								</Link>
 							</MenuItem>
@@ -124,12 +129,12 @@ function NavBar (props) {
 		</div>
 	) : (
 		<div style={{ display: "flex", flexDirection: "row" }}>
-			<Link to='/login' className={classes.link}>
+			<Link to='/login' className={classes.link} onClick={handleClick}>
 				<Button onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block" }}>
 					Login
 				</Button>
 			</Link>
-			<Link to='/signup' className={classes.link}>
+			<Link to='/signup' className={classes.link} onClick={handleClick}>
 				<Button onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block" }}>
 					Sign Up
 				</Button>
@@ -143,7 +148,7 @@ function NavBar (props) {
 				<Container maxWidth='xl'>
 					<Toolbar disableGutters>
 						<Box sx={{ display: { xs: "none", md: "flex" } }}>
-							<Link to='/' className={classes.mainLink}>
+							<Link to='/' className={classes.mainLink} onClick={handleClick}>
 								<WorkRoundedIcon sx={{ mr: 1, mt: 0.4 }} />
 								<SearchRoundedIcon
 									sx={{ mr: 1, mt: 0.4 }}
@@ -197,7 +202,7 @@ function NavBar (props) {
 							>
 								{pages.map((page) => (
 									<MenuItem key={page} onClick={handleCloseNavMenu}>
-										<Link to={`/${page}`}>
+										<Link to={`/${page}`} onClick={handleClick}>
 											<Typography textAlign='center' sx={{ textTransform: "capitalize" }}>
 												{page}
 											</Typography>
@@ -208,7 +213,7 @@ function NavBar (props) {
 						</Box>
 
 						<Box sx={{ display: { xs: "flex", md: "none" }, mx: "auto" }}>
-							<Link to='/' className={classes.mainLink}>
+							<Link to='/' className={classes.mainLink} onClick={handleClick}>
 								<WorkRoundedIcon sx={{ mr: 1, mt: 0.4 }} />
 								<SearchRoundedIcon
 									sx={{ mr: 1, mt: 0.4 }}
@@ -235,7 +240,7 @@ function NavBar (props) {
 						<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
 							{pages.map((page) => (
 								<div className={classes.link} key={page}>
-									<Link to={`/${page}`}>
+									<Link to={`/${page}`} onClick={handleClick}>
 										<Button
 											onClick={handleCloseNavMenu}
 											sx={{ my: 2, color: "white", display: "block" }}

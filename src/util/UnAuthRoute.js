@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import Loading from "../pages/Loading";
 
 const UnAuthRoute = ({ authenticated, user, element: Component, redirect, ...rest }) => {
-	return user.loading ? <Loading /> : authenticated ? <Navigate to={redirect} replace /> : <Component {...rest} />;
+	return authenticated ? <Navigate to={redirect} replace /> : <Component {...rest} />;
 };
 
 UnAuthRoute.propTypes = {

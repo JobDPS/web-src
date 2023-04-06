@@ -2,22 +2,22 @@ import * as types from "../types";
 
 const initialState = {
 	credentials: {
-		loading: false
+		loading: true
 	},
 	discuss: {
-		loading: false
+		loading: true
 	},
 	companies: {
-		loading: false
+		loading: true
 	},
 	social: {
-		loading: false
+		loading: true
 	},
 	following: {
-		loading: false
+		loading: true
 	},
 	followers: {
-		loading: false
+		loading: true
 	},
 	errors: null
 };
