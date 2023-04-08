@@ -148,7 +148,11 @@ function NavBar (props) {
 				<Container maxWidth='xl'>
 					<Toolbar disableGutters>
 						<Box sx={{ display: { xs: "none", md: "flex" } }}>
-							<Link to='/' className={classes.mainLink} onClick={handleClick}>
+							<Link
+								to={authenticated ? "/explore" : "/"}
+								className={classes.mainLink}
+								onClick={handleClick}
+							>
 								<WorkRoundedIcon sx={{ mr: 1, mt: 0.4 }} />
 								<SearchRoundedIcon
 									sx={{ mr: 1, mt: 0.4 }}
@@ -213,7 +217,11 @@ function NavBar (props) {
 						</Box>
 
 						<Box sx={{ display: { xs: "flex", md: "none" }, mx: "auto" }}>
-							<Link to='/' className={classes.mainLink} onClick={handleClick}>
+							<Link
+								to={authenticated ? "/explore" : "/"}
+								className={classes.mainLink}
+								onClick={handleClick}
+							>
 								<WorkRoundedIcon sx={{ mr: 1, mt: 0.4 }} />
 								<SearchRoundedIcon
 									sx={{ mr: 1, mt: 0.4 }}

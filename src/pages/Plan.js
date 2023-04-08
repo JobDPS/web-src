@@ -51,7 +51,7 @@ class Plan extends Component {
 	};
 
 	componentDidMount () {
-		if (this.props.user.authenticated) this.props.getRelationData();
+		this.props.getRelationData();
 	}
 
 	render () {

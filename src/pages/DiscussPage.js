@@ -256,7 +256,9 @@ class DiscussPage extends Component {
 										</FormHelperText>
 									</Box>
 								) : (
-									<Typography variant='h4'>{post.info.title.stringValue}</Typography>
+									<Typography variant='h4' sx={{ wordBreak: "break-all" }}>
+										{post.info.title.stringValue}
+									</Typography>
 								)}
 
 								{authenticated &&

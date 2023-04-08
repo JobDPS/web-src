@@ -70,7 +70,9 @@ class Post extends Component {
 							</Typography>
 							<Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
 								<Link to={`/discuss/${this.props.post.info.id.stringValue}`}>
-									<Typography variant='h4'>{this.props.post.info.title.stringValue}</Typography>
+									<Typography variant='h4' sx={{ wordBreak: "break-all" }}>
+										{this.props.post.info.title.stringValue}
+									</Typography>
 									<Typography
 										variant='body1'
 										sx={{

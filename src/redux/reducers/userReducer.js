@@ -2,7 +2,7 @@ import * as types from "../types";
 
 const initialState = {
 	authenticated: false,
-	loading: true
+	loading: false
 };
 
 function reducer (state = initialState, action) {

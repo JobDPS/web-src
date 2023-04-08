@@ -229,16 +229,28 @@ class Profile extends Component {
 								}}
 							>
 								<Box sx={{ display: "flex", flexDirection: "column" }}>
-									<Typography variant='h4'>{post.info.title.stringValue}</Typography>
+									<Typography
+										variant='h4'
+										sx={{
+											display: "-webkit-box",
+											WebkitBoxOrient: "vertical",
+											WebkitLineClamp: "1",
+											overflow: "hidden",
+											textOverflow: "ellipsis",
+											wordBreak: "break-all"
+										}}
+									>
+										{post.info.title.stringValue}
+									</Typography>
 									<Typography
 										variant='body1'
 										sx={{
-											maxWidth: "500px",
 											display: "-webkit-box",
 											WebkitBoxOrient: "vertical",
 											WebkitLineClamp: "4",
 											overflow: "hidden",
-											textOverflow: "ellipsis"
+											textOverflow: "ellipsis",
+											wordBreak: "break-all"
 										}}
 									>
 										{post.info.body.stringValue}
@@ -423,7 +435,7 @@ class Profile extends Component {
 										mr: "8px",
 										width: "10rem",
 										height: "10rem",
-										border: `4px solid ${theme.palette.primary[700]}`
+										border: `4px solid ${theme.palette.primary[500]}`
 									})}
 								/>
 								{!loading3 &&
