@@ -38,7 +38,6 @@ import {
 	followUser,
 	uploadImage
 } from "../redux/actions/profileActions";
-import withHistory from "../util/withHistory";
 
 const styles = (theme) => ({
 	...theme.spread,
@@ -84,10 +83,6 @@ const styles = (theme) => ({
 });
 
 class Profile extends Component {
-	state = {
-		errors: {}
-	};
-
 	componentDidMount () {
 		this.props.getProfileData(this.props.match.params.userId);
 		this.props.getDiscussData(this.props.match.params.userId);
@@ -131,7 +126,6 @@ class Profile extends Component {
 		dayjs.extend(relativeTime);
 		const { classes, UI: { loading }, profile } = this.props;
 		const { authenticated, loading: loading3 } = this.props.user;
-		const { errors } = this.state;
 
 		const socPosts = profile.social.loading ? (
 			<Typography>loading</Typography>
@@ -598,7 +592,6 @@ Profile.propTypes = {
 	getFollowingData: PropTypes.func.isRequired,
 	followUser: PropTypes.func.isRequired,
 	uploadImage: PropTypes.func.isRequired,
-	history: PropTypes.object.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired,
 	profile: PropTypes.object.isRequired
@@ -621,4 +614,4 @@ const mapActionsToProps = {
 	uploadImage
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(withHistory(Profile)));
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Profile));

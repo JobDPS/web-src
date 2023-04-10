@@ -8,17 +8,9 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from "@mui/icons-material/Add";
-import Input from "@mui/material/Input";
-import TextField from "@mui/material/TextField";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import CircularProgress from "@mui/material/CircularProgress";
-import FormHelperText from "@mui/material/FormHelperText";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
@@ -31,7 +23,6 @@ import ThumbUpRoundedIcon from "@mui/icons-material/ThumbUpRounded";
 import { connect } from "react-redux";
 import { getUserData, getCompanyData, getDiscussData, getSocialData } from "../redux/actions/exploreActions";
 import { getRelationData } from "../redux/actions/relationActions";
-import withHistory from "../util/withHistory";
 
 const styles = (theme) => ({
 	...theme.spread,
@@ -81,21 +72,12 @@ const styles = (theme) => ({
 });
 
 class Explore extends Component {
-	state = {
-		errors: {}
-	};
-
 	componentDidMount () {
 		this.props.getUserData();
 		this.props.getCompanyData();
 		this.props.getDiscussData();
 		this.props.getSocialData();
 		this.props.getRelationData();
-	}
-
-	componentDidUpdate (prevProps, prevState) {
-		if (this.props.UI.errors && JSON.stringify(this.props.UI.errors) !== JSON.stringify(this.state.errors))
-			this.setState({ errors: this.props.UI.errors });
 	}
 
 	handleClick = (event) => {
@@ -107,7 +89,6 @@ class Explore extends Component {
 		dayjs.extend(relativeTime);
 		const { classes, UI: { loading }, explore } = this.props;
 		const { authenticated, loading: loading3 } = this.props.user;
-		const { errors } = this.state;
 
 		const users = explore.user.loading ? (
 			<Typography>loading</Typography>
@@ -682,10 +663,10 @@ Explore.propTypes = {
 	getDiscussData: PropTypes.func.isRequired,
 	getSocialData: PropTypes.func.isRequired,
 	getRelationData: PropTypes.func.isRequired,
-	history: PropTypes.object.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired,
-	explore: PropTypes.object.isRequired
+	explore: PropTypes.object.isRequired,
+	relation: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -703,4 +684,4 @@ const mapActionsToProps = {
 	getRelationData
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(withHistory(Explore)));
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Explore));
