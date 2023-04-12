@@ -1,70 +1,46 @@
-# Getting Started with Create React App
+<p align="center">
+    <img src="https://github.com/JobDPS/web-src/blob/main/.github/assets/banner.png?raw=true">
+</p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h1 align="center">JobDPS</h1>
 
-## Available Scripts
+<p align="center">Job search planning tool</p>
 
-In the project directory, you can run:
+<p align="center">
+<img alt="build" src="https://img.shields.io/github/actions/workflow/status/JobDPS/web-src/lint.yml?branch=main&color=2088FF&logo=github%20actions">
+<img alt="version" src="https://img.shields.io/badge/version-v0.1.0-informational">
+</p>
 
-### `npm start`
+## 💼 Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Responsive and modern frontend made with React and Material UI
+- Intuitive and secure account creation with Google Firebase Authentication
+- Custom-made dashboard to keep track of your company relations and application progress
+- Social media and discussion forum features to interact with your peers
+- Curated list of top companies to browse
+- Multi-platform concurrent data stored in Google Firebase Firestore database
+- [Custom API](https://github.com/JobDPS/firebase-api) for data handling made with Express
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🎯 About Us and Our Goal
 
-### `npm test`
+This project was made by three college students as their Honors Capstone project and a culmination of their full stack development skills. We all went through the grueling process that is job finding and never found any tool or website that made the process easier. This was our main motivation in creating JobDPS and hope the tool can help our peers, whether fresh graduates or a seasoned professional, make job finding easier.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📖 Libraries Used
 
-### `npm run build`
+- [React](https://react.dev/)
+- [Material UI](https://mui.com/)
+- [Firebase](https://firebase.google.com/)
+- [DayJS](https://day.js.org/)
+- [Axios](https://axios-http.com/)
+- [Redux-Saga](https://redux-saga.js.org/)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🤝 Contributing
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Find a problem? Feel free to open an [issue](https://github.com/JobDPS/web-src/issues/new)!  
+Want to contribute to the code-base? Fork and submit a pull request!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 📝 License
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Released open source under the [MIT License](https://github.com/JobDPS/web-src/blob/master/LICENSE)  
+Copyright © 2022-2023 JobDPS  
+v0.1.0
