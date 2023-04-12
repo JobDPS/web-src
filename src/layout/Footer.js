@@ -1,5 +1,4 @@
 import * as React from "react";
-import clsx from "clsx";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { withStyles } from "@mui/styles";

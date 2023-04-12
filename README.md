@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/JobDPS/web-src/blob/main/.github/assets/banner.png?raw=true">
+    <img src="https://raw.githubusercontent.com/JobDPS/web-src/master/.github/assets/banner.png">
 </p>
 
 <h1 align="center">JobDPS</h1>
@@ -8,7 +8,7 @@
 
 <p align="center">
 <img alt="build" src="https://img.shields.io/github/actions/workflow/status/JobDPS/web-src/lint.yml?branch=main&color=2088FF&logo=github%20actions">
-<img alt="version" src="https://img.shields.io/badge/version-v0.1.0-informational">
+<img alt="version" src="https://img.shields.io/badge/release-v0.1.0-informational?logo=github">
 </p>
 
 ## 💼 Features
@@ -33,6 +33,15 @@ This project was made by three college students as their Honors Capstone project
 - [DayJS](https://day.js.org/)
 - [Axios](https://axios-http.com/)
 - [Redux-Saga](https://redux-saga.js.org/)
+
+## 📸 Screenshots
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/JobDPS/web-src/master/.github/assets/screenshot1.png">
+    <img src="https://raw.githubusercontent.com/JobDPS/web-src/master/.github/assets/screenshot2.png">
+    <img src="https://raw.githubusercontent.com/JobDPS/web-src/master/.github/assets/screenshot3.png">
+    <img src="https://raw.githubusercontent.com/JobDPS/web-src/master/.github/assets/screenshot4.png">
+</p>
 
 ## 🤝 Contributing
 

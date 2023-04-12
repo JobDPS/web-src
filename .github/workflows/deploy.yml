@@ -1,0 +1,82 @@
+name: Build and Deploy
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install
+      run: npm i --legacy-peer-deps
+    - name: Run Lint
+      run: npm run lint
+  
+  build:  
+    inputs:
+      name:
+        description: 'Artifact name'
+        required: false
+        default: 'github-pages'
+      path:
+        description: "Path of the directory containing the static assets."
+        required: true
+        default: "build/"
+      retention-days:
+        description: "Duration after which artifact will expire in days."
+        required: false
+        default: "1"
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+      
+      - name: Install 🔧
+        run: npm i --legacy-peer-deps
+      
+      - name: Build 🛠️
+        run: npm run build
+      
+      - name: Archive artifact 📦
+        shell: sh
+        if: runner.os == 'Linux'
+        run: |
+          chmod -c -R +rX "$INPUT_PATH" | while read line; do
+            echo "::warning title=Invalid file permissions automatically fixed::$line"
+          done
+          tar \
+            --dereference --hard-dereference \
+            --directory "$INPUT_PATH" \
+            -cvf "$RUNNER_TEMP/artifact.tar" \
+            --exclude=.git \
+            --exclude=.github \
+            .
+        env:
+          INPUT_PATH: ${{ inputs.path }}
+      
+      - name: Upload artifact 🌐
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.name }}
+          path: ${{ runner.temp }}/artifact.tar
+          retention-days: ${{ inputs.retention-days }}
+          if-no-files-found: error
+  
+  deploy:
+    needs: build
+    
+    permissions:
+      pages: write
+      id-token: write
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy 🛠️
+        id: deployment
+        uses: actions/deploy-pages@v1
