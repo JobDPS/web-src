@@ -7,7 +7,7 @@
 <p align="center">Job search planning tool</p>
 
 <p align="center">
-<img alt="build" src="https://img.shields.io/github/actions/workflow/status/JobDPS/web-src/lint.yml?branch=main&color=2088FF&logo=github%20actions">
+<img alt="build" src="https://img.shields.io/github/actions/workflow/status/JobDPS/web-src/deploy.yml?branch=master&color=2088FF&logo=github%20actions">
 <img alt="version" src="https://img.shields.io/badge/release-v0.1.0-informational?logo=github">
 </p>
 
