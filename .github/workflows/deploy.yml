@@ -13,21 +13,9 @@ jobs:
     - name: Run Lint
       run: npm run lint
   
-  build:  
-    inputs:
-      name:
-        description: 'Artifact name'
-        required: false
-        default: 'github-pages'
-      path:
-        description: "Path of the directory containing the static assets."
-        required: true
-        default: "build/"
-      retention-days:
-        description: "Duration after which artifact will expire in days."
-        required: false
-        default: "1"
-
+  build:
+    needs: lint
+    
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
@@ -38,6 +26,8 @@ jobs:
       
       - name: Build 🛠️
         run: npm run build
+        env:
+          CI: ""
       
       - name: Archive artifact 📦
         shell: sh
@@ -54,14 +44,14 @@ jobs:
             --exclude=.github \
             .
         env:
-          INPUT_PATH: ${{ inputs.path }}
+          INPUT_PATH: "build/"
       
       - name: Upload artifact 🌐
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ inputs.name }}
+          name: "github-pages"
           path: ${{ runner.temp }}/artifact.tar
-          retention-days: ${{ inputs.retention-days }}
+          retention-days: 1
           if-no-files-found: error
   
   deploy:

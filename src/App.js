@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Routes as Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes as Switch, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import { ThemeProvider as MuiThemeProvider, createTheme } from "@mui/material/styles";
 // Redux
@@ -76,7 +76,7 @@ class App extends Component {
 								<Route exact path='/explore' element={<AuthRoute element={Explore} />} />
 								<Route exact path='/schedule' element={<AuthRoute element={Schedule} />} />
 
-								<Route path='*' to='/' />
+								<Route path='*' element={<Navigate to="/" replace />} />
 							</Switch>
 						</div>
 						<Footer />
