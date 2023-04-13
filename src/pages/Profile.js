@@ -434,8 +434,9 @@ class Profile extends Component {
 								/>
 								{!loading3 &&
 								!profile.credentials.loading &&
-								this.props.user.credentials.userId ===
-									profile.credentials.credentials.id.stringValue ? (
+								(authenticated &&
+									this.props.user.credentials.userId ===
+										profile.credentials.credentials.id.stringValue) ? (
 									<Fragment>
 										<IconButton
 											sx={{
@@ -481,6 +482,7 @@ class Profile extends Component {
 										{profile.credentials.loading ||
 										profile.followers.loading ||
 										loading3 ||
+										!authenticated ||
 										profile.credentials.credentials.id.stringValue ===
 											this.props.user.credentials.userId ? (
 											<span />
