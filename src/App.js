@@ -53,7 +53,7 @@ class App extends Component {
 		return (
 			<MuiThemeProvider theme={theme}>
 				<Provider store={store}>
-					<Router>
+					<Router basename="/web-src">
 						<NavBar />
 						<div>
 							<Switch>
