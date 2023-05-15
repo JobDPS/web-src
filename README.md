@@ -8,7 +8,7 @@
 
 <p align="center">
 <img alt="build" src="https://img.shields.io/github/actions/workflow/status/JobDPS/web-src/deploy.yml?branch=master&color=2088FF&logo=github%20actions">
-<img alt="version" src="https://img.shields.io/badge/release-v0.1.0-informational?logo=github">
+<img alt="version" src="https://img.shields.io/badge/release-v0.2.0-informational?logo=github">
 </p>
 
 ## 💼 Features
@@ -52,4 +52,4 @@ Want to contribute to the code-base? Fork and submit a pull request!
 
 Released open source under the [MIT License](https://github.com/JobDPS/web-src/blob/master/LICENSE)  
 Copyright © 2022-2023 JobDPS  
-v0.1.0
+v0.2.0
