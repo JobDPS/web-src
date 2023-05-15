@@ -13,7 +13,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
+import Snackbar from "@mui/material/Snackbar";
 
+import CloseIcon from "@mui/icons-material/Close";
 import ModeCommentRoundedIcon from "@mui/icons-material/ModeCommentRounded";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
@@ -54,12 +56,32 @@ const styles = (theme) => ({
 });
 
 class Post extends Component {
+	state = {
+		open: false
+	};
+
 	handleLike = () => {
 		this.props.likeSocialPost(this.props.post.info.id.stringValue);
 	};
 	handleClick = (event) => {
 		const anchor = (event.target.ownerDocument || document).querySelector("#back-to-top-anchor");
 		if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+	};
+	handleShare = () => {
+		this.setState({ open: true });
+		if (this.props.post.info.title) {
+			navigator.clipboard.writeText(
+				`${window.location.origin}/web-src/discuss/${this.props.post.info.id.stringValue}`
+			);
+		} else {
+			navigator.clipboard.writeText(
+				`${window.location.origin}/web-src/social/${this.props.post.info.id.stringValue}`
+			);
+		}
+	};
+	handleClose = (e, r) => {
+		if (r === "clickaway") return;
+		this.setState({ open: false });
 	};
 
 	render () {
@@ -77,6 +99,12 @@ class Post extends Component {
 		) {
 			liked = true;
 		}
+
+		const action = (
+			<IconButton size='small' aria-label='close' color='inherit' onClick={this.handleClose}>
+				<CloseIcon fontSize='small' />
+			</IconButton>
+		);
 
 		return (
 			<Paper
@@ -248,7 +276,7 @@ class Post extends Component {
 										justifyContent: "center"
 									}}
 								>
-									<Button sx={{ display: "flex", flexDirection: "row" }}>
+									<Button sx={{ display: "flex", flexDirection: "row" }} onClick={this.handleShare}>
 										<LinkRoundedIcon sx={{ mr: "8px" }} />
 										<Typography>Share</Typography>
 									</Button>
@@ -333,7 +361,7 @@ class Post extends Component {
 										justifyContent: "center"
 									}}
 								>
-									<Button sx={{ display: "flex", flexDirection: "row" }}>
+									<Button sx={{ display: "flex", flexDirection: "row" }} onClick={this.handleShare}>
 										<LinkRoundedIcon sx={{ mr: "8px" }} />
 										<Typography>Share</Typography>
 									</Button>
@@ -359,6 +387,13 @@ class Post extends Component {
 						</Box>
 					</Link>
 				</Box>
+				<Snackbar
+					open={this.state.open}
+					autoHideDuration={3000}
+					onClose={this.handleClose}
+					message='Copied link to clipboard'
+					action={action}
+				/>
 			</Paper>
 		);
 	}
