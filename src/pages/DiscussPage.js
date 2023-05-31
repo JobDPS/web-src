@@ -36,7 +36,14 @@ import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 
 import { connect } from "react-redux";
-import { getDiscussPost, createReply, deleteDiscussPost, editDiscussPost } from "../redux/actions/discussActions";
+import {
+	getDiscussPost,
+	createReply,
+	deleteDiscussPost,
+	editDiscussPost,
+	likeDiscussPost,
+	dislikeDiscussPost
+} from "../redux/actions/discussActions";
 import { clearErrors, openForm } from "../redux/actions/userActions";
 import Reply from "../components/DiscussionPost/Reply";
 
@@ -99,8 +106,11 @@ class DiscussPage extends Component {
 			this.setState({ replyBody: "" });
 	}
 
-	handleChangeVote = (event, nextValue) => {
-		this.setState({ vote: nextValue });
+	handleLike = () => {
+		this.props.likeDiscussPost(this.props.discuss.post.info.id.stringValue);
+	};
+	handleDislike = () => {
+		this.props.dislikeDiscussPost(this.props.discuss.post.info.id.stringValue);
 	};
 
 	handleChange = (event) => {
@@ -164,6 +174,28 @@ class DiscussPage extends Component {
 		const { errors } = this.state;
 		const options = [ "Edit", "Delete" ];
 		const open = Boolean(this.state.anchorEl);
+		let liked = false;
+		let disliked = false;
+		if (
+			!loading3 &&
+			post &&
+			this.props.user.credentials.likes.arrayValue.values &&
+			this.props.user.credentials.likes.arrayValue.values
+				.map((id) => id.stringValue)
+				.includes(post.info.id.stringValue)
+		) {
+			liked = true;
+		}
+		if (
+			!loading3 &&
+			post &&
+			this.props.user.credentials.dislikes.arrayValue.values &&
+			this.props.user.credentials.dislikes.arrayValue.values
+				.map((id) => id.stringValue)
+				.includes(post.info.id.stringValue)
+		) {
+			disliked = true;
+		}
 
 		if (this.props.discuss.errors) {
 			const error = this.props.discuss.errors.error;
@@ -216,24 +248,36 @@ class DiscussPage extends Component {
 					}}
 				>
 					<Box sx={{ display: "flex", flexDirection: "row" }}>
-						{/* <ToggleButtonGroup
-							orientation='vertical'
-							value={this.state.vote}
-							exclusive
-							onChange={this.handleChangeVote}
-							size='small'
-							color='primary'
-						>
-							<ToggleButton value='up' aria-label='up vote' sx={{ border: "0" }}>
-								<KeyboardArrowUpRoundedIcon />
-							</ToggleButton>
-							<Typography sx={{ p: "8px", color: "rgba(0, 0, 0, 0.87)" }}>
+						<Box sx={{ display: "flex", flexDirection: "column", width: "3rem" }}>
+							<Button
+								size='small'
+								sx={(theme) => ({
+									minWidth: "100%",
+									color: `${liked ? theme.palette.primary[500] : "rgba(0, 0, 0, 0.26)"}`
+								})}
+								onClick={this.handleLike}
+							>
+								<KeyboardArrowUpRoundedIcon size='small' />
+							</Button>
+							<Typography
+								sx={(theme) => ({
+									mx: "auto",
+									color: `${liked || disliked ? theme.palette.primary[500] : "rgba(0, 0, 0, 0.87)"}`
+								})}
+							>
 								{post.info.vote ? post.info.vote.integerValue : 0}
 							</Typography>
-							<ToggleButton value='down' aria-label='down vote' sx={{ border: "0" }}>
-								<KeyboardArrowDownRoundedIcon />
-							</ToggleButton>
-						</ToggleButtonGroup> */}
+							<Button
+								size='small'
+								sx={(theme) => ({
+									minWidth: "100%",
+									color: `${disliked ? theme.palette.primary[500] : "rgba(0, 0, 0, 0.26)"}`
+								})}
+								onClick={this.handleDislike}
+							>
+								<KeyboardArrowDownRoundedIcon size='small' />
+							</Button>
+						</Box>
 						<Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
 							<Box sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
 								{this.state.editing ? (
@@ -272,7 +316,7 @@ class DiscussPage extends Component {
 											aria-expanded={open ? "true" : undefined}
 											aria-haspopup='true'
 											onClick={this.handleClick}
-											sx={{ ml: "auto" }}
+											sx={{ ml: "auto", maxHeight: "3rem" }}
 										>
 											<MoreHorizRoundedIcon />
 										</IconButton>
@@ -486,6 +530,8 @@ DiscussPage.propTypes = {
 	deleteDiscussPost: PropTypes.func.isRequired,
 	createReply: PropTypes.func.isRequired,
 	editDiscussPost: PropTypes.func.isRequired,
+	likeDiscussPost: PropTypes.func.isRequired,
+	dislikeDiscussPost: PropTypes.func.isRequired,
 	openForm: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired,
@@ -504,6 +550,8 @@ const mapActionsToProps = {
 	deleteDiscussPost,
 	createReply,
 	editDiscussPost,
+	likeDiscussPost,
+	dislikeDiscussPost,
 	openForm
 };
 

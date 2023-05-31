@@ -49,3 +49,7 @@ export const editSocialPostReplyReply = (postId, replyId, replyReplyId, newPostR
 export const likeSocialPost = (postId) => (dispatch) => {
 	dispatch({ type: "LIKE_SOCIAL_POST", payload: { postId } });
 };
+
+export const likeSocialPost2 = (postId) => (dispatch) => {
+	dispatch({ type: "LIKE_SOCIAL_POST2", payload: { postId } });
+};
