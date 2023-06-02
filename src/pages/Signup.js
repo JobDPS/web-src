@@ -10,6 +10,8 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import FormHelperText from "@mui/material/FormHelperText";
 
+import backgroundImage from "../assets/bg6.png";
+
 import { connect } from "react-redux";
 import { signupUser, clearErrors } from "../redux/actions/userActions";
 
@@ -18,8 +20,12 @@ const styles = (theme) => ({
 	content: {
 		display: "flex",
 		flexDirection: "column",
-		backgroundColor: "#00252e",
-		minHeight: "100vh"
+		// backgroundColor: "#00252e",
+		minHeight: "100vh",
+		backgroundColor: "#c3e7e7",
+		background: `url(${backgroundImage}) right center no-repeat`,
+		// backgroundSize: "contain",
+		backgroundSize: "1024px 1024px"
 	},
 	toolbar: {
 		...theme.mixins.toolbar

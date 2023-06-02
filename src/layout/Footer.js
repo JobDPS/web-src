@@ -24,7 +24,8 @@ const styles = (theme) => ({
 	},
 	mainLink: {
 		display: "flex",
-		marginLeft: "16px"
+		marginLeft: "16px",
+		cursor: "default"
 	},
 	searchIcon: {
 		padding: "5px 0 0 3px",
