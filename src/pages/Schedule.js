@@ -63,11 +63,6 @@ class Schedule extends Component {
 		this.props.getRelationData();
 	}
 
-	handleClick = (event) => {
-		const anchor = (event.target.ownerDocument || document).querySelector("#back-to-top-anchor");
-		if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "center" });
-	};
-
 	render () {
 		dayjs.extend(relativeTime);
 		const { classes, UI: { loading }, relation } = this.props;

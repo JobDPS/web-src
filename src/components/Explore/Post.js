@@ -63,10 +63,6 @@ class Post extends Component {
 	handleLike = () => {
 		this.props.likeSocialPost(this.props.post.info.id.stringValue);
 	};
-	handleClick = (event) => {
-		const anchor = (event.target.ownerDocument || document).querySelector("#back-to-top-anchor");
-		if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "center" });
-	};
 	handleShare = () => {
 		this.setState({ open: true });
 		if (this.props.post.info.title) {
@@ -122,7 +118,7 @@ class Post extends Component {
 					<Box sx={{ display: "flex", flexDirection: "row" }}>
 						<Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
 							<Box sx={{ display: "flex", flexDirection: "row", mb: "8px" }}>
-								<Link to={`/discuss/${post.info.id.stringValue}`} onClick={this.handleClick}>
+								<Link to={`/discuss/${post.info.id.stringValue}`}>
 									<Typography
 										variant='h4'
 										className={classes.hover}
@@ -137,7 +133,7 @@ class Post extends Component {
 							</Box>
 							<Box sx={{ display: "flex", flexDirection: "row" }}>
 								<Box sx={{ display: "flex", flexDirection: "row" }}>
-									<Link to={`/users/${post.info.author.stringValue}`} onClick={this.handleClick}>
+									<Link to={`/users/${post.info.author.stringValue}`}>
 										<IconButton sx={{ p: 0, mr: "8px" }}>
 											<Avatar
 												alt={post.author.username.stringValue}
@@ -146,7 +142,7 @@ class Post extends Component {
 										</IconButton>
 									</Link>
 									<Box sx={{ display: "flex", flexDirection: "column", my: "auto" }}>
-										<Link to={`/users/${post.info.author.stringValue}`} onClick={this.handleClick}>
+										<Link to={`/users/${post.info.author.stringValue}`}>
 											<Typography
 												variant='body2'
 												className={classes.hover}
@@ -155,7 +151,7 @@ class Post extends Component {
 												{post.author.username.stringValue}
 											</Typography>
 										</Link>
-										<Link to='/discuss' onClick={this.handleClick}>
+										<Link to='/discuss'>
 											<Box sx={{ display: "flex", flexDirection: "row" }}>
 												<Typography variant='body2' sx={{ mr: "4px" }}>
 													Posted {dayjs(post.info.createdAt.timestampValue).fromNow()} in
@@ -185,7 +181,7 @@ class Post extends Component {
 						<Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
 							<Box sx={{ display: "flex", flexDirection: "row" }}>
 								<Box sx={{ display: "flex", flexDirection: "row" }}>
-									<Link to={`/users/${post.info.author.stringValue}`} onClick={this.handleClick}>
+									<Link to={`/users/${post.info.author.stringValue}`}>
 										<IconButton sx={{ p: 0, mr: "8px" }}>
 											<Avatar
 												alt={post.author.username.stringValue}
@@ -195,12 +191,12 @@ class Post extends Component {
 										</IconButton>
 									</Link>
 									<Box sx={{ display: "flex", flexDirection: "column", my: "auto" }}>
-										<Link to={`/users/${post.info.author.stringValue}`} onClick={this.handleClick}>
+										<Link to={`/users/${post.info.author.stringValue}`}>
 											<Typography variant='h6' className={classes.hover} sx={{ display: "flex" }}>
 												{post.author.username.stringValue}
 											</Typography>
 										</Link>
-										<Link to='/social' onClick={this.handleClick}>
+										<Link to='/social'>
 											<Box sx={{ display: "flex", flexDirection: "row" }}>
 												<Typography variant='body2' sx={{ mr: "4px" }}>
 													Posted {dayjs(post.info.createdAt.timestampValue).fromNow()}
@@ -257,7 +253,6 @@ class Post extends Component {
 												`/social/${post.info.id.stringValue}`
 											)
 										}
-										onClick={this.handleClick}
 									>
 										<Button sx={{ display: "flex", flexDirection: "row" }}>
 											<ChatRoundedIcon sx={{ mr: "8px" }} />
@@ -342,7 +337,6 @@ class Post extends Component {
 												`/social/${post.info.id.stringValue}`
 											)
 										}
-										onClick={this.handleClick}
 									>
 										<Button sx={{ display: "flex", flexDirection: "row" }}>
 											<ChatRoundedIcon sx={{ mr: "8px" }} />
@@ -369,11 +363,7 @@ class Post extends Component {
 							</Fragment>
 						)}
 					</Grid>
-					<Link
-						to={`/social/${post.info.id.stringValue}`}
-						style={{ margin: "auto 0", marginLeft: "auto" }}
-						onClick={this.handleClick}
-					>
+					<Link to={`/social/${post.info.id.stringValue}`} style={{ margin: "auto 0", marginLeft: "auto" }}>
 						<Box sx={{ display: "flex", flexDirection: "row" }}>
 							<ModeCommentRoundedIcon />
 							<Typography>

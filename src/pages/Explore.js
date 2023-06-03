@@ -82,11 +82,6 @@ class Explore extends Component {
 		this.props.getRelationData();
 	}
 
-	handleClick = (event) => {
-		const anchor = (event.target.ownerDocument || document).querySelector("#back-to-top-anchor");
-		if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "center" });
-	};
-
 	render () {
 		dayjs.extend(relativeTime);
 		const { classes, UI: { loading }, explore } = this.props;
@@ -98,7 +93,7 @@ class Explore extends Component {
 			<Typography>no users</Typography>
 		) : (
 			explore.user.users.map((user) => (
-				<Link to={`/users/${user.id.stringValue}`} key={user.id.stringValue} onClick={this.handleClick}>
+				<Link to={`/users/${user.id.stringValue}`} key={user.id.stringValue}>
 					<Box
 						sx={{
 							display: "flex",
@@ -134,7 +129,7 @@ class Explore extends Component {
 			<Typography>no companies</Typography>
 		) : (
 			explore.companies.companies.map((comp) => (
-				<Link to='/companies' key={comp.id.stringValue} onClick={this.handleClick}>
+				<Link to='/companies' key={comp.id.stringValue}>
 					<Box
 						sx={{
 							display: "flex",
@@ -193,11 +188,7 @@ class Explore extends Component {
 			<Typography>no relations yet</Typography>
 		) : (
 			this.props.relation.allRelations.slice(0, 5).map((relation) => (
-				<Link
-					to={`/plan/${relation.info.id.stringValue}`}
-					key={relation.info.id.stringValue}
-					onClick={this.handleClick}
-				>
+				<Link to={`/plan/${relation.info.id.stringValue}`} key={relation.info.id.stringValue}>
 					<Box
 						sx={{
 							display: "flex",
@@ -281,7 +272,7 @@ class Explore extends Component {
 									boxSizing: "border-box"
 								}}
 							>
-								<Link to={`/users/${this.props.user.credentials.userId}`} onClick={this.handleClick}>
+								<Link to={`/users/${this.props.user.credentials.userId}`}>
 									<Box
 										sx={{
 											display: "flex",
@@ -329,7 +320,7 @@ class Explore extends Component {
 									padding: "8px"
 								}}
 							>
-								<Link to='/plan' onClick={this.handleClick}>
+								<Link to='/plan'>
 									<Typography sx={{ fontWeight: 700, mb: "8px" }} className={classes.hover2}>
 										Your Relations
 									</Typography>
@@ -358,7 +349,7 @@ class Explore extends Component {
 									padding: "8px"
 								}}
 							>
-								<Link to='/companies' onClick={this.handleClick}>
+								<Link to='/companies'>
 									<Typography sx={{ fontWeight: 700, mb: "8px" }} className={classes.hover2}>
 										Browse Companies
 									</Typography>

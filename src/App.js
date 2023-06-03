@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Routes as Switch, Route, Navigate } from "react-router-dom";
+import React, { Component, useEffect } from "react";
+import { BrowserRouter as Router, Routes as Switch, Route, Navigate, useLocation } from "react-router-dom";
 import "./App.css";
 import { ThemeProvider as MuiThemeProvider, createTheme } from "@mui/material/styles";
 // Redux
@@ -48,12 +48,27 @@ if (token) {
 	// }
 }
 
+// From: https://stackoverflow.com/a/61602724
+function ScrollToTop () {
+	const { pathname } = useLocation();
+
+	useEffect(
+		() => {
+			window.scrollTo(0, 0);
+		},
+		[ pathname ]
+	);
+
+	return null;
+}
+
 class App extends Component {
 	render () {
 		return (
 			<MuiThemeProvider theme={theme}>
 				<Provider store={store}>
-					<Router basename="/web-src">
+					<Router basename='/web-src'>
+						<ScrollToTop />
 						<NavBar />
 						<div>
 							<Switch>
@@ -76,7 +91,7 @@ class App extends Component {
 								<Route exact path='/explore' element={<AuthRoute element={Explore} />} />
 								<Route exact path='/schedule' element={<AuthRoute element={Schedule} />} />
 
-								<Route path='*' element={<Navigate to="/" replace />} />
+								<Route path='*' element={<Navigate to='/' replace />} />
 							</Switch>
 						</div>
 						<Footer />
