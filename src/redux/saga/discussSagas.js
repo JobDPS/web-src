@@ -1,4 +1,4 @@
-import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest, takeLeading } from "redux-saga/effects";
 import axios from "axios";
 
 function* getDiscussData () {
@@ -158,6 +158,34 @@ function* editPostReplyReply (action) {
 	}
 }
 
+function* likePost (action) {
+	try {
+		yield axios.post(`/discuss/${action.payload.postId}/like`);
+		// const res = yield axios.get(`/recommend/social`);
+		// yield put({ type: "EXPLORE_SET_SOCIAL", payload: res.data });
+		const res = yield axios.get(`/discuss/${action.payload.postId}`);
+		yield put({ type: "SET_DISCUSS", payload: res.data });
+		const res2 = yield axios.get("/user");
+		yield put({ type: "SET_USER", payload: res2.data.userData });
+	} catch (e) {
+		yield put({ type: "DISCUSS_SET_ERROR", payload: e.response.data });
+	}
+}
+
+function* dislikePost (action) {
+	try {
+		yield axios.post(`/discuss/${action.payload.postId}/dislike`);
+		// const res = yield axios.get(`/recommend/social`);
+		// yield put({ type: "EXPLORE_SET_SOCIAL", payload: res.data });
+		const res = yield axios.get(`/discuss/${action.payload.postId}`);
+		yield put({ type: "SET_DISCUSS", payload: res.data });
+		const res2 = yield axios.get("/user");
+		yield put({ type: "SET_USER", payload: res2.data.userData });
+	} catch (e) {
+		yield put({ type: "DISCUSS_SET_ERROR", payload: e.response.data });
+	}
+}
+
 function* discussSaga () {
 	yield takeLatest("GET_DISCUSS_DATA", getDiscussData);
 	yield takeLatest("CREATE_DISCUSS_POST", createPost);
@@ -171,6 +199,8 @@ function* discussSaga () {
 	yield takeLatest("EDIT_DISCUSS_POST", editPost);
 	yield takeLatest("EDIT_DISCUSS_POSTREPLY", editPostReply);
 	yield takeLatest("EDIT_DISCUSS_POSTREPLYREPLY", editPostReplyReply);
+	yield takeLeading("LIKE_DISCUSS_POST", likePost);
+	yield takeLeading("DISLIKE_DISCUSS_POST", dislikePost);
 }
 
 export default discussSaga;

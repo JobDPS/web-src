@@ -24,7 +24,8 @@ const styles = (theme) => ({
 	},
 	mainLink: {
 		display: "flex",
-		marginLeft: "16px"
+		marginLeft: "16px",
+		cursor: "default"
 	},
 	searchIcon: {
 		padding: "5px 0 0 3px",
@@ -51,10 +52,6 @@ const styles = (theme) => ({
 
 function Footer (props) {
 	const classes = props.classes;
-	const handleClick = (event) => {
-		const anchor = (event.target.ownerDocument || document).querySelector("#back-to-top-anchor");
-		if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "center" });
-	};
 	return (
 		<Paper square elevation={4} className={classes.root} sx={{ backgroundColor: "#f3f4f6" }}>
 			<Grid container spacing={{ xs: 1, sm: 1, md: 2 }}>
@@ -94,7 +91,6 @@ function Footer (props) {
 										color: "inherit",
 										textDecoration: "none"
 									}}
-									onClick={handleClick}
 								>
 									About Us
 								</Typography>
@@ -108,7 +104,6 @@ function Footer (props) {
 										color: "inherit",
 										textDecoration: "none"
 									}}
-									onClick={handleClick}
 								>
 									Contact
 								</Typography>
@@ -122,7 +117,6 @@ function Footer (props) {
 										color: "inherit",
 										textDecoration: "none"
 									}}
-									onClick={handleClick}
 								>
 									Help Center
 								</Typography>

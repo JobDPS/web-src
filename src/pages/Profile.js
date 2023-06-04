@@ -103,11 +103,6 @@ class Profile extends Component {
 		}
 	}
 
-	handleClick = (event) => {
-		const anchor = (event.target.ownerDocument || document).querySelector("#back-to-top-anchor");
-		if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "center" });
-	};
-
 	handleFollow = () => {
 		this.props.followUser(this.props.match.params.userId);
 	};
@@ -138,7 +133,6 @@ class Profile extends Component {
 						to={`/social/${post.info.id.stringValue}`}
 						className={classes.link}
 						key={post.info.id.stringValue}
-						onClick={this.handleClick}
 					>
 						<Paper
 							className={classes.paper}
@@ -200,7 +194,6 @@ class Profile extends Component {
 						to={`/discuss/${post.info.id.stringValue}`}
 						className={classes.link}
 						key={post.info.id.stringValue}
-						onClick={this.handleClick}
 					>
 						<Paper
 							className={classes.paper}
@@ -347,7 +340,6 @@ class Profile extends Component {
 							padding: "4px",
 							paddingTop: "8px"
 						}}
-						onClick={this.handleClick}
 						key={user.credentials.id.stringValue}
 					>
 						<Link to={`/users/${user.credentials.id.stringValue}`} className={classes.link2}>
@@ -386,7 +378,6 @@ class Profile extends Component {
 							padding: "4px",
 							paddingTop: "8px"
 						}}
-						onClick={this.handleClick}
 						key={user.credentials.id.stringValue}
 					>
 						<Link to={`/users/${user.credentials.id.stringValue}`} className={classes.link2}>

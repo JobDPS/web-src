@@ -1,4 +1,4 @@
-import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest, takeLeading } from "redux-saga/effects";
 import axios from "axios";
 
 function* getProfileData (action) {
@@ -94,7 +94,7 @@ function* profileSaga () {
 	yield takeLatest("PROFILE_GET_COMPANY_DATA", getCompanyData);
 	yield takeLatest("PROFILE_GET_FOLLOWING_DATA", getFollowingData);
 	yield takeLatest("PROFILE_GET_FOLLOWERS_DATA", getFollowersData);
-	yield takeLatest("PROFILE_FOLLOW_USER", followUser);
+	yield takeLeading("PROFILE_FOLLOW_USER", followUser);
 	yield takeLatest("PROFILE_UPLOAD_IMAGE", uploadImage);
 }
 

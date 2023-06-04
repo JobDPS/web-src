@@ -48,3 +48,11 @@ export const editDiscussPostReply = (postId, replyId, newPostReplyData) => (disp
 export const editDiscussPostReplyReply = (postId, replyId, replyReplyId, newPostReplyData) => (dispatch) => {
 	dispatch({ type: "EDIT_DISCUSS_POSTREPLYREPLY", payload: { postId, replyId, replyReplyId, newPostReplyData } });
 };
+
+export const likeDiscussPost = (postId) => (dispatch) => {
+	dispatch({ type: "LIKE_DISCUSS_POST", payload: { postId } });
+};
+
+export const dislikeDiscussPost = (postId) => (dispatch) => {
+	dispatch({ type: "DISLIKE_DISCUSS_POST", payload: { postId } });
+};

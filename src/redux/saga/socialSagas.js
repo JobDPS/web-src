@@ -1,4 +1,4 @@
-import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest, takeLeading } from "redux-saga/effects";
 import axios from "axios";
 
 function* getSocialData () {
@@ -159,6 +159,34 @@ function* editPostReplyReply (action) {
 	}
 }
 
+function* likePost (action) {
+	try {
+		yield axios.post(`/social/${action.payload.postId}/like`);
+		const res = yield axios.get(`/recommend/social`);
+		yield put({ type: "EXPLORE_SET_SOCIAL", payload: res.data });
+		// const res = yield axios.get(`/social/${action.payload.postId}`);
+		// yield put({ type: "SET_SOCIAL", payload: res.data });
+		const res2 = yield axios.get("/user");
+		yield put({ type: "SET_USER", payload: res2.data.userData });
+	} catch (e) {
+		yield put({ type: "SOCIAL_SET_ERROR", payload: e.response.data });
+	}
+}
+
+function* likePost2 (action) {
+	try {
+		yield axios.post(`/social/${action.payload.postId}/like`);
+		// const res = yield axios.get(`/recommend/social`);
+		// yield put({ type: "EXPLORE_SET_SOCIAL", payload: res.data });
+		const res = yield axios.get(`/social/${action.payload.postId}`);
+		yield put({ type: "SET_SOCIAL", payload: res.data });
+		const res2 = yield axios.get("/user");
+		yield put({ type: "SET_USER", payload: res2.data.userData });
+	} catch (e) {
+		yield put({ type: "SOCIAL_SET_ERROR", payload: e.response.data });
+	}
+}
+
 function* socialSaga () {
 	yield takeLatest("GET_SOCIAL_DATA", getSocialData);
 	yield takeLatest("CREATE_SOCIAL_POST", createPost);
@@ -172,6 +200,8 @@ function* socialSaga () {
 	yield takeLatest("EDIT_SOCIAL_POST", editPost);
 	yield takeLatest("EDIT_SOCIAL_POSTREPLY", editPostReply);
 	yield takeLatest("EDIT_SOCIAL_POSTREPLYREPLY", editPostReplyReply);
+	yield takeLeading("LIKE_SOCIAL_POST", likePost);
+	yield takeLeading("LIKE_SOCIAL_POST2", likePost2);
 }
 
 export default socialSaga;

@@ -32,11 +32,19 @@ import AddIcon from "@mui/icons-material/Add";
 import KeyboardArrowUpRoundedIcon from "@mui/icons-material/KeyboardArrowUpRounded";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import ReplyRoundedIcon from "@mui/icons-material/ReplyRounded";
+import ThumbUpRoundedIcon from "@mui/icons-material/ThumbUpRounded";
+import ThumbDownOffAltRoundedIcon from "@mui/icons-material/ThumbDownOffAltRounded";
 import ForumRoundedIcon from "@mui/icons-material/ForumRounded";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 
 import { connect } from "react-redux";
-import { getSocialPost, createReply, deleteSocialPost, editSocialPost } from "../redux/actions/socialActions";
+import {
+	getSocialPost,
+	createReply,
+	deleteSocialPost,
+	editSocialPost,
+	likeSocialPost2
+} from "../redux/actions/socialActions";
 import { clearErrors, openForm } from "../redux/actions/userActions";
 import Reply from "../components/SocialPost/Reply";
 
@@ -99,8 +107,8 @@ class SocialPage extends Component {
 			this.setState({ replyBody: "" });
 	}
 
-	handleChangeVote = (event, nextValue) => {
-		this.setState({ vote: nextValue });
+	handleLike = () => {
+		this.props.likeSocialPost2(this.props.social.post.info.id.stringValue);
 	};
 
 	handleChange = (event) => {
@@ -162,6 +170,17 @@ class SocialPage extends Component {
 		const { errors } = this.state;
 		const options = [ "Edit", "Delete" ];
 		const open = Boolean(this.state.anchorEl);
+		let liked = false;
+		if (
+			!loading3 &&
+			post &&
+			this.props.user.credentials.likes.arrayValue.values &&
+			this.props.user.credentials.likes.arrayValue.values
+				.map((id) => id.stringValue)
+				.includes(post.info.id.stringValue)
+		) {
+			liked = true;
+		}
 
 		if (this.props.social.errors) {
 			const error = this.props.social.errors.error;
@@ -214,24 +233,6 @@ class SocialPage extends Component {
 					}}
 				>
 					<Box sx={{ display: "flex", flexDirection: "row" }}>
-						{/* <ToggleButtonGroup
-							orientation='vertical'
-							value={this.state.vote}
-							exclusive
-							onChange={this.handleChangeVote}
-							size='small'
-							color='primary'
-						>
-							<ToggleButton value='up' aria-label='up vote' sx={{ border: "0" }}>
-								<KeyboardArrowUpRoundedIcon />
-							</ToggleButton>
-							<Typography sx={{ p: "8px", color: "rgba(0, 0, 0, 0.87)" }}>
-								{post.info.vote ? post.info.vote.integerValue : 0}
-							</Typography>
-							<ToggleButton value='down' aria-label='down vote' sx={{ border: "0" }}>
-								<KeyboardArrowDownRoundedIcon />
-							</ToggleButton>
-						</ToggleButtonGroup> */}
 						<Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
 							<Box sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
 								{authenticated &&
@@ -430,6 +431,22 @@ class SocialPage extends Component {
 				<div className={classes.content}>
 					<Paper className={classes.main}>
 						<Box>{posts}</Box>
+						<Box>
+							<Button sx={{ display: "flex", flexDirection: "row" }} onClick={this.handleLike}>
+								{liked ? (
+									<Fragment>
+										<ThumbUpRoundedIcon sx={{ mr: "8px" }} />
+										<Typography>UnLike</Typography>
+									</Fragment>
+								) : (
+									<Fragment>
+										<ThumbDownOffAltRoundedIcon sx={{ mr: "8px", transform: "scale(-1,-1)" }} />
+										<Typography>Like</Typography>
+									</Fragment>
+								)}
+							</Button>
+						</Box>
+
 						<Box sx={{ display: "flex", flexDirection: "row" }}>
 							<ForumRoundedIcon />
 							<Typography>
@@ -460,6 +477,7 @@ SocialPage.propTypes = {
 	deleteSocialPost: PropTypes.func.isRequired,
 	createReply: PropTypes.func.isRequired,
 	editSocialPost: PropTypes.func.isRequired,
+	likeSocialPost2: PropTypes.func.isRequired,
 	openForm: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 	UI: PropTypes.object.isRequired,
@@ -478,6 +496,7 @@ const mapActionsToProps = {
 	deleteSocialPost,
 	createReply,
 	editSocialPost,
+	likeSocialPost2,
 	openForm
 };
 
