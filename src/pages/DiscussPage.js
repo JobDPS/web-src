@@ -178,6 +178,7 @@ class DiscussPage extends Component {
 		let disliked = false;
 		if (
 			!loading3 &&
+			authenticated &&
 			post &&
 			this.props.user.credentials.likes.arrayValue.values &&
 			this.props.user.credentials.likes.arrayValue.values
@@ -188,6 +189,7 @@ class DiscussPage extends Component {
 		}
 		if (
 			!loading3 &&
+			authenticated &&
 			post &&
 			this.props.user.credentials.dislikes.arrayValue.values &&
 			this.props.user.credentials.dislikes.arrayValue.values
@@ -255,6 +257,7 @@ class DiscussPage extends Component {
 									minWidth: "100%",
 									color: `${liked ? theme.palette.primary[500] : "rgba(0, 0, 0, 0.26)"}`
 								})}
+								disabled={!authenticated}
 								onClick={this.handleLike}
 							>
 								<KeyboardArrowUpRoundedIcon size='small' />
@@ -273,6 +276,7 @@ class DiscussPage extends Component {
 									minWidth: "100%",
 									color: `${disliked ? theme.palette.primary[500] : "rgba(0, 0, 0, 0.26)"}`
 								})}
+								disabled={!authenticated}
 								onClick={this.handleDislike}
 							>
 								<KeyboardArrowDownRoundedIcon size='small' />

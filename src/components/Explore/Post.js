@@ -88,6 +88,7 @@ class Post extends Component {
 		let liked = false;
 		if (
 			!loading3 &&
+			authenticated &&
 			this.props.user.credentials.likes.arrayValue.values &&
 			this.props.user.credentials.likes.arrayValue.values
 				.map((id) => id.stringValue)
@@ -301,6 +302,7 @@ class Post extends Component {
 										<Button
 											sx={{ display: "flex", flexDirection: "row" }}
 											onClick={this.handleLike}
+											disabled={!authenticated}
 										>
 											{liked ? (
 												<Fragment>

@@ -173,6 +173,7 @@ class SocialPage extends Component {
 		let liked = false;
 		if (
 			!loading3 &&
+			authenticated &&
 			post &&
 			this.props.user.credentials.likes.arrayValue.values &&
 			this.props.user.credentials.likes.arrayValue.values
@@ -432,7 +433,11 @@ class SocialPage extends Component {
 					<Paper className={classes.main}>
 						<Box>{posts}</Box>
 						<Box>
-							<Button sx={{ display: "flex", flexDirection: "row" }} onClick={this.handleLike}>
+							<Button
+								sx={{ display: "flex", flexDirection: "row" }}
+								onClick={this.handleLike}
+								disabled={!authenticated}
+							>
 								{liked ? (
 									<Fragment>
 										<ThumbUpRoundedIcon sx={{ mr: "8px" }} />
