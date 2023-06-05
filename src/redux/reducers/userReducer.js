@@ -25,48 +25,6 @@ function reducer (state = initialState, action) {
 				...state,
 				loading: true
 			};
-		// case types.LIKE_POST:
-		// 	return {
-		// 		...state,
-		// 		likes: [
-		// 			...state.likes,
-		// 			{
-		// 				userHandle: state.credentials.handle,
-		// 				postId: action.payload.postId
-		// 			}
-		// 		]
-		// 	};
-		// case types.UNLIKE_POST:
-		// 	return {
-		// 		...state,
-		// 		likes: state.likes.filter((like) => like.postId !== action.payload.postId)
-		// 	};
-		// case types.MARK_NOTIFICATIONS_READ:
-		// 	state.notifications.forEach((not) => (not.read = true));
-		// 	return {
-		// 		...state
-		// 	};
-		// case types.LIKE_COMMENT:
-		// 	return {
-		// 		...state,
-		// 		likes: [
-		// 			...state.likes,
-		// 			{
-		// 				userHandle: state.credentials.handle,
-		// 				commentId: action.payload.commentId
-		// 			}
-		// 		]
-		// 	};
-		// case types.UNLIKE_COMMENT:
-		// 	return {
-		// 		...state,
-		// 		likes: state.likes.filter((like) => like.commentId !== action.payload.commentId)
-		// 	};
-		// case types.SET_PROFILE:
-		// 	return {
-		// 		...state,
-		// 		loading: false
-		// 	};
 		default:
 			return state;
 	}
