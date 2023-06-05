@@ -56,3 +56,11 @@ export const likeDiscussPost = (postId) => (dispatch) => {
 export const dislikeDiscussPost = (postId) => (dispatch) => {
 	dispatch({ type: "DISLIKE_DISCUSS_POST", payload: { postId } });
 };
+
+export const likeDiscussPost2 = (postId) => (dispatch) => {
+	dispatch({ type: "LIKE_DISCUSS_POST2", payload: { postId } });
+};
+
+export const dislikeDiscussPost2 = (postId) => (dispatch) => {
+	dispatch({ type: "DISLIKE_DISCUSS_POST2", payload: { postId } });
+};

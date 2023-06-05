@@ -16,10 +16,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import FormHelperText from "@mui/material/FormHelperText";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
+import Divider from "@mui/material/Divider";
+
 import ModeCommentRoundedIcon from "@mui/icons-material/ModeCommentRounded";
 
 import { connect } from "react-redux";
-import { createPost } from "../../redux/actions/socialActions";
 
 const styles = (theme) => ({
 	...theme.spread,
@@ -65,53 +66,53 @@ class Post extends Component {
 						}}
 					>
 						<Box sx={{ display: "flex", flexDirection: "row" }}>
-							<Typography variant='h4' sx={{ my: "auto" }}>
-								{this.props.post.info.vote ? this.props.post.info.vote.integerValue : 0}
-							</Typography>
 							<Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
 								<Link to={`/social/${this.props.post.info.id.stringValue}`}>
-									<Typography
-										variant='body1'
-										sx={{
-											maxWidth: "500px",
-											display: "-webkit-box",
-											WebkitBoxOrient: "vertical",
-											WebkitLineClamp: "2",
-											overflow: "hidden",
-											textOverflow: "ellipsis"
-										}}
-									>
+									<Typography variant='h4' sx={{ mb: "4px" }}>
 										{this.props.post.info.body.stringValue}
 									</Typography>
 								</Link>
+								<Divider sx={{ mb: "4px" }} />
 								<Box sx={{ display: "flex", flexDirection: "row" }}>
 									<Link to={`/users/${this.props.post.info.author.stringValue}`}>
 										<Box sx={{ display: "flex", flexDirection: "row" }}>
-											<IconButton sx={{ p: 0 }}>
+											<IconButton sx={{ p: 0, mr: "4px" }}>
 												<Avatar
 													alt='Remy Sharp'
 													src={this.props.post.author.imageUrl.stringValue}
 												/>
 											</IconButton>
-											<Typography variant='body2'>
+											<Typography variant='body2' sx={{ my: "auto" }}>
 												{this.props.post.author.username.stringValue} posted{" "}
 												{dayjs(this.props.post.info.createdAt.timestampValue).fromNow()}
 											</Typography>
 										</Box>
 									</Link>
 
-									<Box sx={{ ml: "auto" }}>
+									<Box sx={{ ml: "auto", my: "auto" }}>
 										<Link to={`/social/${this.props.post.info.id.stringValue}`}>
-											<ModeCommentRoundedIcon />
-											{this.props.post.replies ? (
-												this.props.post.replies.length +
-												this.props.post.replies.reduce(
-													(a, b) => a + (b.replies ? b.replies.length : 0),
+											<Box sx={{ display: "flex", flexDirection: "row" }}>
+												<ModeCommentRoundedIcon />
+												<Typography sx={{ m: "auto", px: "4px" }}>
+													{this.props.post.replies ? (
+														this.props.post.replies.length +
+														this.props.post.replies.reduce(
+															(a, b) => a + (b.replies ? b.replies.length : 0),
+															0
+														)
+													) : (
+														0
+													)}
+												</Typography>
+											</Box>
+											<Typography variant='subtitle2'>
+												{this.props.post.info.vote ? (
+													this.props.post.info.vote.integerValue
+												) : (
 													0
-												)
-											) : (
-												0
-											)}
+												)}{" "}
+												likes
+											</Typography>
 										</Link>
 									</Box>
 								</Box>

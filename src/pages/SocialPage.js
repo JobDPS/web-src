@@ -173,6 +173,7 @@ class SocialPage extends Component {
 		let liked = false;
 		if (
 			!loading3 &&
+			authenticated &&
 			post &&
 			this.props.user.credentials.likes.arrayValue.values &&
 			this.props.user.credentials.likes.arrayValue.values
@@ -235,6 +236,22 @@ class SocialPage extends Component {
 					<Box sx={{ display: "flex", flexDirection: "row" }}>
 						<Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
 							<Box sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
+								<Box sx={{ display: "flex", flexDirection: "row", p: "8px" }}>
+									<Link to={`/users/${post.info.author.stringValue}`}>
+										<IconButton sx={{ p: 0, mr: "4px" }}>
+											<Avatar alt='Remy Sharp' src={post.author.imageUrl.stringValue} />
+										</IconButton>
+									</Link>
+									<Typography variant='body2' sx={{ my: "auto" }}>
+										{post.author.username.stringValue} posted{" "}
+										{dayjs(post.info.createdAt.timestampValue).fromNow()}
+									</Typography>
+									<Divider sx={{ height: 28, m: 0.5 }} orientation='vertical' />
+									<Typography variant='body2' sx={{ my: "auto" }}>
+										{new Date(post.info.createdAt.timestampValue).toLocaleString()}
+									</Typography>
+								</Box>
+
 								{authenticated &&
 								!loading3 &&
 								post.info.author.stringValue === this.props.user.credentials.userId &&
@@ -284,24 +301,6 @@ class SocialPage extends Component {
 								)}
 							</Box>
 
-							<Box sx={{ display: "flex", flexDirection: "row" }}>
-								<Box sx={{ display: "flex", flexDirection: "row" }}>
-									<Link to={`/users/${post.info.author.stringValue}`}>
-										<IconButton sx={{ p: 0 }}>
-											<Avatar alt='Remy Sharp' src={post.author.imageUrl.stringValue} />
-										</IconButton>
-									</Link>
-									<Typography variant='body2'>
-										{post.author.username.stringValue} posted{" "}
-										{dayjs(post.info.createdAt.timestampValue).fromNow()}
-									</Typography>
-									<Divider sx={{ height: 28, m: 0.5 }} orientation='vertical' />
-									<Typography variant='body2'>
-										{new Date(post.info.createdAt.timestampValue).toLocaleString()}
-									</Typography>
-								</Box>
-							</Box>
-
 							{this.state.editing ? (
 								<Box sx={{ p: "8px" }}>
 									<TextField
@@ -317,13 +316,16 @@ class SocialPage extends Component {
 										placeholder='Write your body here...'
 										disabled={loading || loading2}
 										label='Body'
+										sx={{ ".MuiInputBase-input": { fontSize: "1.5rem" } }}
 									/>
 									<FormHelperText error={errors.postBody || errors.error ? true : false}>
 										{errors.postBody} {errors.error}
 									</FormHelperText>
 								</Box>
 							) : (
-								<Typography variant='body1'>{post.info.body.stringValue}</Typography>
+								<Typography variant='h5' sx={{ p: "8px" }}>
+									{post.info.body.stringValue}
+								</Typography>
 							)}
 
 							{this.state.editing ? (
@@ -431,8 +433,12 @@ class SocialPage extends Component {
 				<div className={classes.content}>
 					<Paper className={classes.main}>
 						<Box>{posts}</Box>
-						<Box>
-							<Button sx={{ display: "flex", flexDirection: "row" }} onClick={this.handleLike}>
+						<Box sx={{ display: "flex", flexDirection: "row", p: "8px" }}>
+							<Button
+								sx={{ display: "flex", flexDirection: "row" }}
+								onClick={this.handleLike}
+								disabled={!authenticated}
+							>
 								{liked ? (
 									<Fragment>
 										<ThumbUpRoundedIcon sx={{ mr: "8px" }} />
@@ -445,20 +451,19 @@ class SocialPage extends Component {
 									</Fragment>
 								)}
 							</Button>
-						</Box>
-
-						<Box sx={{ display: "flex", flexDirection: "row" }}>
-							<ForumRoundedIcon />
-							<Typography>
-								Comments{" ("}
-								{post && post.replies ? (
-									post.replies.length +
-									post.replies.reduce((a, b) => a + (b.replies ? b.replies.length : 0), 0)
-								) : (
-									0
-								)}
-								{")"}
-							</Typography>
+							<Box sx={{ display: "flex", flexDirection: "row", ml: "auto", my: "auto" }}>
+								<ForumRoundedIcon />
+								<Typography>
+									Comments{" ("}
+									{post && post.replies ? (
+										post.replies.length +
+										post.replies.reduce((a, b) => a + (b.replies ? b.replies.length : 0), 0)
+									) : (
+										0
+									)}
+									{")"}
+								</Typography>
+							</Box>
 						</Box>
 						<Box>{form}</Box>
 						<Box>{replies}</Box>

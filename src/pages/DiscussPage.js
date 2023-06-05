@@ -178,6 +178,7 @@ class DiscussPage extends Component {
 		let disliked = false;
 		if (
 			!loading3 &&
+			authenticated &&
 			post &&
 			this.props.user.credentials.likes.arrayValue.values &&
 			this.props.user.credentials.likes.arrayValue.values
@@ -188,6 +189,7 @@ class DiscussPage extends Component {
 		}
 		if (
 			!loading3 &&
+			authenticated &&
 			post &&
 			this.props.user.credentials.dislikes.arrayValue.values &&
 			this.props.user.credentials.dislikes.arrayValue.values
@@ -255,6 +257,7 @@ class DiscussPage extends Component {
 									minWidth: "100%",
 									color: `${liked ? theme.palette.primary[500] : "rgba(0, 0, 0, 0.26)"}`
 								})}
+								disabled={!authenticated}
 								onClick={this.handleLike}
 							>
 								<KeyboardArrowUpRoundedIcon size='small' />
@@ -273,6 +276,7 @@ class DiscussPage extends Component {
 									minWidth: "100%",
 									color: `${disliked ? theme.palette.primary[500] : "rgba(0, 0, 0, 0.26)"}`
 								})}
+								disabled={!authenticated}
 								onClick={this.handleDislike}
 							>
 								<KeyboardArrowDownRoundedIcon size='small' />
@@ -356,16 +360,16 @@ class DiscussPage extends Component {
 							<Box sx={{ display: "flex", flexDirection: "row" }}>
 								<Box sx={{ display: "flex", flexDirection: "row" }}>
 									<Link to={`/users/${post.info.author.stringValue}`}>
-										<IconButton sx={{ p: 0 }}>
+										<IconButton sx={{ p: 0, mr: "4px" }}>
 											<Avatar alt='Remy Sharp' src={post.author.imageUrl.stringValue} />
 										</IconButton>
 									</Link>
-									<Typography variant='body2'>
+									<Typography variant='body2' sx={{ my: "auto" }}>
 										{post.author.username.stringValue} posted{" "}
 										{dayjs(post.info.createdAt.timestampValue).fromNow()}
 									</Typography>
 									<Divider sx={{ height: 28, m: 0.5 }} orientation='vertical' />
-									<Typography variant='body2'>
+									<Typography variant='body2' sx={{ my: "auto" }}>
 										{new Date(post.info.createdAt.timestampValue).toLocaleString()}
 									</Typography>
 								</Box>
@@ -500,7 +504,7 @@ class DiscussPage extends Component {
 				<div className={classes.content}>
 					<Paper className={classes.main}>
 						<Box>{posts}</Box>
-						<Box sx={{ display: "flex", flexDirection: "row" }}>
+						<Box sx={{ display: "flex", flexDirection: "row", p: "8px" }}>
 							<ForumRoundedIcon />
 							<Typography>
 								Comments{" ("}
